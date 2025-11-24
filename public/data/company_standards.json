@@ -1,0 +1,101 @@
+{
+  "total_projects": 74,
+  "total_itr": 914,
+  "total_workers": 8716,
+  "itr_per_100_workers_avg": 15.35,
+  "itr_per_100_workers_median": 9.62,
+  "itr_per_100_workers_min": 2.56,
+  "itr_per_100_workers_max": 69.23,
+  "position_groups": [
+    {
+      "position_group": "Мастер",
+      "unique_employees": 192,
+      "total_hours": 298112,
+      "percentage": 35.82,
+      "avg_hours_per_employee": 1553
+    },
+    {
+      "position_group": "Водитель / Машинист / Механик",
+      "unique_employees": 70,
+      "total_hours": 110859,
+      "percentage": 13.06,
+      "avg_hours_per_employee": 1584
+    },
+    {
+      "position_group": "Специалист по общим вопросам / Административный работник",
+      "unique_employees": 66,
+      "total_hours": 109485,
+      "percentage": 12.31,
+      "avg_hours_per_employee": 1659
+    },
+    {
+      "position_group": "Специалист по охране труда",
+      "unique_employees": 61,
+      "total_hours": 96674,
+      "percentage": 11.38,
+      "avg_hours_per_employee": 1585
+    },
+    {
+      "position_group": "Производитель работ",
+      "unique_employees": 49,
+      "total_hours": 82585,
+      "percentage": 9.14,
+      "avg_hours_per_employee": 1685
+    },
+    {
+      "position_group": "Кладовщик / Работник склада / Специалист ОМТС",
+      "unique_employees": 34,
+      "total_hours": 51397,
+      "percentage": 6.34,
+      "avg_hours_per_employee": 1512
+    },
+    {
+      "position_group": "Руководитель проекта",
+      "unique_employees": 19,
+      "total_hours": 40794,
+      "percentage": 3.54,
+      "avg_hours_per_employee": 2147
+    },
+    {
+      "position_group": "Сотрудник службы безопасности",
+      "unique_employees": 18,
+      "total_hours": 41720,
+      "percentage": 3.36,
+      "avg_hours_per_employee": 2318
+    },
+    {
+      "position_group": "Инспектор строительных лесов",
+      "unique_employees": 13,
+      "total_hours": 11972,
+      "percentage": 2.43,
+      "avg_hours_per_employee": 921
+    },
+    {
+      "position_group": "Специалист по сопровождению групп",
+      "unique_employees": 7,
+      "total_hours": 5580,
+      "percentage": 1.31,
+      "avg_hours_per_employee": 797
+    },
+    {
+      "position_group": "Инструктор / Преподаватель",
+      "unique_employees": 4,
+      "total_hours": 4800,
+      "percentage": 0.75,
+      "avg_hours_per_employee": 1200
+    },
+    {
+      "position_group": "Инженер-конструктор / Техник-конструктор",
+      "unique_employees": 3,
+      "total_hours": 3489,
+      "percentage": 0.56,
+      "avg_hours_per_employee": 1163
+    }
+  ],
+  "scale_distribution": {
+    "Small": 26,
+    "Medium": 20,
+    "Very Large": 14,
+    "Large": 14
+  }
+}

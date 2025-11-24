@@ -1,0 +1,98 @@
+[
+  {
+    "position_group": "Мастер",
+    "total_employees": 192,
+    "percentage_of_total_itr": 35.82,
+    "avg_per_project": 4.69,
+    "present_in_projects": 67,
+    "avg_hours_per_employee": 1553
+  },
+  {
+    "position_group": "Водитель / Машинист / Механик",
+    "total_employees": 70,
+    "percentage_of_total_itr": 13.06,
+    "avg_per_project": 4.5,
+    "present_in_projects": 24,
+    "avg_hours_per_employee": 1584
+  },
+  {
+    "position_group": "Специалист по общим вопросам / Административный работник",
+    "total_employees": 66,
+    "percentage_of_total_itr": 12.31,
+    "avg_per_project": 2.82,
+    "present_in_projects": 39,
+    "avg_hours_per_employee": 1659
+  },
+  {
+    "position_group": "Специалист по охране труда",
+    "total_employees": 61,
+    "percentage_of_total_itr": 11.38,
+    "avg_per_project": 3.94,
+    "present_in_projects": 36,
+    "avg_hours_per_employee": 1585
+  },
+  {
+    "position_group": "Производитель работ",
+    "total_employees": 49,
+    "percentage_of_total_itr": 9.14,
+    "avg_per_project": 1.71,
+    "present_in_projects": 52,
+    "avg_hours_per_employee": 1685
+  },
+  {
+    "position_group": "Кладовщик / Работник склада / Специалист ОМТС",
+    "total_employees": 34,
+    "percentage_of_total_itr": 6.34,
+    "avg_per_project": 2.31,
+    "present_in_projects": 26,
+    "avg_hours_per_employee": 1512
+  },
+  {
+    "position_group": "Руководитель проекта",
+    "total_employees": 19,
+    "percentage_of_total_itr": 3.54,
+    "avg_per_project": 1.13,
+    "present_in_projects": 30,
+    "avg_hours_per_employee": 2147
+  },
+  {
+    "position_group": "Сотрудник службы безопасности",
+    "total_employees": 18,
+    "percentage_of_total_itr": 3.36,
+    "avg_per_project": 1.68,
+    "present_in_projects": 22,
+    "avg_hours_per_employee": 2318
+  },
+  {
+    "position_group": "Инспектор строительных лесов",
+    "total_employees": 13,
+    "percentage_of_total_itr": 2.43,
+    "avg_per_project": 2.43,
+    "present_in_projects": 7,
+    "avg_hours_per_employee": 921
+  },
+  {
+    "position_group": "Специалист по сопровождению групп",
+    "total_employees": 7,
+    "percentage_of_total_itr": 1.31,
+    "avg_per_project": 4.0,
+    "present_in_projects": 2,
+    "avg_hours_per_employee": 797
+  },
+  {
+    "position_group": "Инструктор / Преподаватель",
+    "total_employees": 4,
+    "percentage_of_total_itr": 0.75,
+    "avg_per_project": 4.0,
+    "present_in_projects": 1,
+    "avg_hours_per_employee": 1200
+  },
+  {
+    "position_group": "Инженер-конструктор / Техник-конструктор",
+    "total_employees": 3,
+    "percentage_of_total_itr": 0.56,
+    "avg_per_project": 1.25,
+    "present_in_projects": 4,
+    "avg_hours_per_employee": 1163
+  }
+]

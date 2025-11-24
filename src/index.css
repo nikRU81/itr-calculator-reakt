@@ -1,0 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-slate-200;
+  }
+
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased;
+  }
+}
+
+@layer components {
+  /* Card Components */
+  .card {
+    @apply bg-white rounded-lg shadow-card p-6 transition-shadow duration-300;
+  }
+
+  .card:hover {
+    @apply shadow-card-hover;
+  }
+
+  /* Metric Cards */
+  .metric-card {
+    @apply rounded-lg p-6 text-white shadow-lg transition-all duration-300;
+  }
+
+  .metric-card:hover {
+    @apply scale-105 shadow-xl;
+  }
+
+  /* Button Styles */
+  .btn {
+    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300 inline-flex items-center justify-center gap-2;
+  }
+
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-500 text-white hover:from-primary-700 hover:to-primary-600 shadow-md hover:shadow-lg;
+  }
+
+  .btn-secondary {
+    @apply bg-slate-200 text-slate-700 hover:bg-slate-300;
+  }
+
+  /* Input Styles */
+  .input {
+    @apply w-full px-4 py-3 rounded-lg border-2 border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-colors duration-200 outline-none;
+  }
+
+  /* Table Styles */
+  .table {
+    @apply w-full border-collapse;
+  }
+
+  .table thead {
+    @apply bg-gradient-to-r from-primary-600 to-primary-500 text-white;
+  }
+
+  .table th {
+    @apply px-4 py-3 text-left font-semibold;
+  }
+
+  .table td {
+    @apply px-4 py-3 border-b border-slate-200;
+  }
+
+  .table tbody tr {
+    @apply hover:bg-slate-50 transition-colors duration-200;
+  }
+
+  /* Sidebar Styles */
+  .sidebar {
+    @apply bg-gradient-to-b from-slate-900 to-slate-950 text-white h-screen fixed left-0 top-0 w-64 shadow-xl;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 hover:bg-white/10;
+  }
+
+  .sidebar-link.active {
+    @apply bg-primary-600 hover:bg-primary-700;
+  }
+
+  /* Header Styles */
+  .header {
+    @apply text-3xl font-extrabold text-slate-900 mb-2;
+  }
+
+  .subtitle {
+    @apply text-base text-slate-600 mb-6;
+  }
+}
+
+@layer utilities {
+  .animate-fade-in-up {
+    animation: fadeInUp 0.5s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.4s ease-out;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}

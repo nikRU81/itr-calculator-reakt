@@ -1,0 +1,17 @@
+{
+  "itr": {
+    "total_records": 3750,
+    "unique_employees": 515,
+    "unique_projects": 74,
+    "total_hours": 857467,
+    "avg_hours_per_record": 228.66,
+    "position_groups": 12
+  },
+  "workers": {
+    "total_records": 26541,
+    "unique_employees": 5362,
+    "unique_projects": 72,
+    "total_hours": 5339663,
+    "avg_hours_per_record": 201.19
+  }
+}
