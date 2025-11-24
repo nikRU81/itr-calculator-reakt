@@ -93,7 +93,10 @@ export default function AnalyticsPage() {
   const totalWorkers = filteredProjects.reduce((sum, p) => sum + p.workers_count, 0);
   const avgRatio =
     totalWorkers > 0
-      ? filteredProjects.reduce((sum, p) => sum + p.itr_per_100_workers, 0) / totalProjects
+      ? filteredProjects
+          .filter((p) => p.itr_per_100_workers !== null)
+          .reduce((sum, p) => sum + p.itr_per_100_workers!, 0) /
+        filteredProjects.filter((p) => p.itr_per_100_workers !== null).length
       : 0;
 
   // Prepare data for charts
@@ -119,13 +122,15 @@ export default function AnalyticsPage() {
     scale,
   }));
 
-  const scatterData = filteredProjects.map((p) => ({
-    x: p.workers_count,
-    y: p.itr_count,
-    z: p.itr_per_100_workers,
-    name: p.project,
-    scale: p.project_scale,
-  }));
+  const scatterData = filteredProjects
+    .filter((p) => p.itr_per_100_workers !== null && p.workers_count > 0)
+    .map((p) => ({
+      x: p.workers_count,
+      y: p.itr_count,
+      z: p.itr_per_100_workers!,
+      name: p.project,
+      scale: p.project_scale,
+    }));
 
   const SCALE_COLORS = {
     Small: '#f59e0b',
@@ -318,7 +323,9 @@ export default function AnalyticsPage() {
                     </td>
                     <td className="text-center">
                       <span className="inline-flex items-center justify-center px-2 py-1 bg-primary-100 text-primary-700 rounded-lg text-sm font-semibold">
-                        {project.itr_per_100_workers.toFixed(2)}
+                        {project.itr_per_100_workers !== null
+                          ? project.itr_per_100_workers.toFixed(2)
+                          : 'N/A'}
                       </span>
                     </td>
                     <td className="text-center text-slate-600">{project.itr_fte.toFixed(2)}</td>
