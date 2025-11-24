@@ -26,9 +26,12 @@ export default function LaborPage() {
       setLoading(true);
       try {
         const projectsData = await loadProjects();
-        // Sort by ITR per 100 workers
-        const sorted = [...projectsData].sort(
-          (a, b) => b.itr_per_100_workers - a.itr_per_100_workers
+        // Filter out projects with null ratio and sort by ITR per 100 workers
+        const validProjects = projectsData.filter(
+          (p) => p.itr_per_100_workers !== null && p.workers_count > 0
+        );
+        const sorted = [...validProjects].sort(
+          (a, b) => b.itr_per_100_workers! - a.itr_per_100_workers!
         );
         setProjects(sorted);
       } catch (err) {
@@ -80,7 +83,7 @@ export default function LaborPage() {
 
   const top10Data = top10Projects.map((p) => ({
     name: p.project.length > 30 ? p.project.substring(0, 30) + '...' : p.project,
-    'ИТР/100': Number(p.itr_per_100_workers.toFixed(2)),
+    'ИТР/100': Number(p.itr_per_100_workers!.toFixed(2)),
     fullName: p.project,
   }));
 
