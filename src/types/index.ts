@@ -32,11 +32,11 @@ export interface CompanyStandards {
   total_projects: number;
   total_itr: number;
   total_workers: number;
-  average_itr_per_100_workers: number;
-  median_itr_per_100_workers: number;
-  min_itr_per_100_workers: number;
-  max_itr_per_100_workers: number;
-  position_groups_stats: PositionGroupStat[];
+  itr_per_100_workers_avg: number;
+  itr_per_100_workers_median: number;
+  itr_per_100_workers_min: number;
+  itr_per_100_workers_max: number;
+  position_groups: PositionGroupStat[];
   scale_distribution: ScaleDistribution;
 }
 
@@ -57,11 +57,14 @@ export interface ScaleDistribution {
 // Project Types
 export interface Project {
   project: string;
-  workers_count: number;
   itr_count: number;
+  itr_hours: number;
+  workers_count: number;
+  workers_hours: number;
   itr_per_100_workers: number;
+  itr_fte: number;
   workers_fte: number;
-  scale: 'Small' | 'Medium' | 'Large' | 'Very Large';
+  project_scale: 'Small' | 'Medium' | 'Large' | 'Very Large';
   position_distribution?: Record<string, number>;
 }
 
@@ -85,11 +88,11 @@ export interface PositionGroupNorm {
 // Scale-Based Standards Types
 export interface ScaleBasedStandards {
   [scale: string]: {
-    projects_count: number;
+    project_count: number;
     avg_workers: number;
     avg_itr: number;
     avg_itr_per_100_workers: number;
-    median_itr_per_100_workers: number;
+    position_groups?: Record<string, number>;
   };
 }
 
@@ -113,13 +116,20 @@ export interface WorkerRecord {
 }
 
 // Monthly Dynamics Types
+export interface MonthlyDynamicsRecord {
+  project: string;
+  month: string;
+  workers_unique_count: number;
+  workers_total_hours: number;
+  itr_unique_count: number;
+  itr_total_hours: number;
+  itr_per_100_workers: number;
+  itr_fte: number;
+  workers_fte: number;
+}
+
 export interface MonthlyDynamics {
-  [project: string]: {
-    months: string[];
-    itr_counts: number[];
-    worker_counts: number[];
-    itr_per_100: number[];
-  };
+  monthly_dynamics: MonthlyDynamicsRecord[];
 }
 
 // Data Statistics Types
