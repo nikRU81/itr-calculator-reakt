@@ -16,8 +16,8 @@ import { loadCalculatorConfig } from '../../utils/calculator';
 const PROJECT_SCALES = [
   { code: 'S', name: 'Малый', minWorkers: 0, maxWorkers: 50, color: '#f59e0b', K_prorab: 22, K_master: 14, K_sklad: 32 },
   { code: 'M', name: 'Средний', minWorkers: 50, maxWorkers: 150, color: '#10b981', K_prorab: 78, K_master: 24, K_sklad: 72 },
-  { code: 'L', name: 'Крупный', minWorkers: 150, maxWorkers: 300, color: '#06b6d4', K_prorab: 120, K_master: 20, K_sklad: 80 },
-  { code: 'XL', name: 'Очень крупный', minWorkers: 300, maxWorkers: Infinity, color: '#4f46e5', K_prorab: 90, K_master: 24, K_sklad: 100 },
+  { code: 'L', name: 'Крупный', minWorkers: 150, maxWorkers: 300, color: '#06b6d4', K_prorab: 169, K_master: 19, K_sklad: 81 },
+  { code: 'XL', name: 'Очень крупный', minWorkers: 300, maxWorkers: Infinity, color: '#4f46e5', K_prorab: 90, K_master: 24, K_sklad: 494 },
 ];
 
 // Условные факторы

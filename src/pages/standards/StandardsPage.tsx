@@ -36,8 +36,8 @@ const COLORS = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b'];
 const PROJECT_SCALES = [
   { code: 'S', name: 'Малый', workers: 'до 50', color: '#f59e0b', K_prorab: 22, K_master: 14, K_sklad: 32, scaleKey: 'Small' },
   { code: 'M', name: 'Средний', workers: '50–150', color: '#10b981', K_prorab: 78, K_master: 24, K_sklad: 72, scaleKey: 'Medium' },
-  { code: 'L', name: 'Крупный', workers: '150–300', color: '#06b6d4', K_prorab: 120, K_master: 20, K_sklad: 80, scaleKey: 'Large' },
-  { code: 'XL', name: 'Очень крупный', workers: '300+', color: '#4f46e5', K_prorab: 90, K_master: 24, K_sklad: 100, scaleKey: 'Very Large' },
+  { code: 'L', name: 'Крупный', workers: '150–300', color: '#06b6d4', K_prorab: 169, K_master: 19, K_sklad: 81, scaleKey: 'Large' },
+  { code: 'XL', name: 'Очень крупный', workers: '300+', color: '#4f46e5', K_prorab: 90, K_master: 24, K_sklad: 494, scaleKey: 'Very Large' },
 ];
 
 // Классификация должностей
@@ -1100,11 +1100,11 @@ export default function StandardsPage() {
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Производитель работ</div>
-                  <div className="font-mono">⌈200/120⌉ = <strong>2</strong></div>
+                  <div className="font-mono">⌈200/169⌉ = <strong>2</strong></div>
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Мастер</div>
-                  <div className="font-mono">⌈200/20⌉ = <strong>10</strong></div>
+                  <div className="font-mono">⌈200/19⌉ = <strong>11</strong></div>
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Специалист по ОТ</div>
@@ -1112,18 +1112,18 @@ export default function StandardsPage() {
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Кладовщик</div>
-                  <div className="font-mono">⌈200/80⌉ = <strong>3</strong></div>
+                  <div className="font-mono">⌈200/81⌉ = <strong>3</strong></div>
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Спец. по общ. вопросам</div>
-                  <div className="font-mono">⌈20/15⌉ = <strong>2</strong></div>
+                  <div className="font-mono">⌈21/15⌉ = <strong>2</strong></div>
                 </div>
               </div>
               <div className="mt-3 p-2 bg-primary-100 rounded-lg text-center">
-                <span className="text-primary-800 font-bold">ИТОГО обязательные: 22 чел ИТР</span>
+                <span className="text-primary-800 font-bold">ИТОГО обязательные: 23 чел ИТР</span>
               </div>
               <div className="mt-2 text-xs text-slate-500 text-center">
-                Коэффициенты для масштаба L: K_прораб=120, K_мастер=20, K_склад=80
+                Коэффициенты для масштаба L: K_прораб=169, K_мастер=19, K_склад=81
               </div>
             </Card>
           </div>
