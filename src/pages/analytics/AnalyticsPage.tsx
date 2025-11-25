@@ -33,6 +33,12 @@ import {
   Cell,
 } from 'recharts';
 
+// Тип для события мыши от Recharts ScatterChart
+interface ScatterChartMouseEvent {
+  xValue?: number;
+  yValue?: number;
+}
+
 const SCALE_COLORS = {
   Small: '#f59e0b',
   Medium: '#10b981',
@@ -269,7 +275,7 @@ export default function AnalyticsPage() {
   const yDomain = getZoomedDomain(baseYDomain, 'y');
 
   // Обработчики зума
-  const handleMouseDown = (e: { xValue?: number; yValue?: number } | null) => {
+  const handleMouseDown = (e: ScatterChartMouseEvent | null) => {
     if (e && e.xValue !== undefined && e.yValue !== undefined) {
       setZoomState((prev) => ({
         ...prev,
@@ -280,7 +286,7 @@ export default function AnalyticsPage() {
     }
   };
 
-  const handleMouseMove = (e: { xValue?: number; yValue?: number } | null) => {
+  const handleMouseMove = (e: ScatterChartMouseEvent | null) => {
     if (zoomState.isZooming && e && e.xValue !== undefined && e.yValue !== undefined) {
       setZoomState((prev) => ({
         ...prev,
@@ -604,8 +610,8 @@ export default function AnalyticsPage() {
 
             <ResponsiveContainer width="100%" height={400}>
               <ScatterChart
-                onMouseDown={handleMouseDown}
-                onMouseMove={handleMouseMove}
+                onMouseDown={handleMouseDown as (state: unknown) => void}
+                onMouseMove={handleMouseMove as (state: unknown) => void}
                 onMouseUp={handleMouseUp}
               >
                 <CartesianGrid strokeDasharray="3 3" />
