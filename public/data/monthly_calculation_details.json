@@ -1,0 +1,3968 @@
+{
+  "generated_at": "2025-11-25",
+  "description": "Детальные данные помесячного расчёта K коэффициентов с выявлением выбросов по методу IQR",
+  "methodology": {
+    "outlier_method": "IQR (Interquartile Range)",
+    "outlier_formula": "Выброс если K < Q1-1.5*IQR или K > Q3+1.5*IQR",
+    "calculation": "K = workers_count / itr_count (количество рабочих на 1 специалиста)"
+  },
+  "positions": [
+    {
+      "position_group": "Водитель / Машинист / Механик",
+      "scales": {
+        "Small": {
+          "projects_count": 11,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 15.0,
+              "mean": 20.1,
+              "min": 5.0,
+              "max": 41.0,
+              "std_dev": 13.9
+            },
+            "without_outliers": {
+              "median": 15.0,
+              "mean": 20.1,
+              "min": 5.0,
+              "max": 41.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 7.0,
+            "q3": 34.5,
+            "iqr": 27.5,
+            "lower_bound": -34.25,
+            "upper_bound": 75.75,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) Сибур-Химпром-Пермь (2025)",
+              "K_median": 5.0,
+              "K_avg": 5.0,
+              "avg_workers": 5.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Башнефть-Новойл-Уфа (2022-2023)",
+              "K_median": 6.0,
+              "K_avg": 6.6,
+              "avg_workers": 9.8,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Башнефтьстрой-Уфанефтехим-Уфа (2022-2023)",
+              "K_median": 7.0,
+              "K_avg": 7.5,
+              "avg_workers": 7.5,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ТАНЕКО-НКТУ-Нижнекамск (2023-2026)",
+              "K_median": 9.0,
+              "K_avg": 11.8,
+              "avg_workers": 13.1,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Илим-ИлимскийЛПК-УстьИлимск (2024-2025)",
+              "K_median": 13.0,
+              "K_avg": 24.4,
+              "avg_workers": 19.1,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Спецмонтаж-ЯНОС-Ярославль (2023)",
+              "K_median": 15.0,
+              "K_avg": 13.0,
+              "avg_workers": 13.0,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Илим-БратскийЛПК-Братск (Весна 2022)",
+              "K_median": 22.5,
+              "K_avg": 39.1,
+              "avg_workers": 44.0,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-АГПЗ-Благо.",
+              "K_median": 28.0,
+              "K_avg": 32.4,
+              "avg_workers": 32.6,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НАКАзот-РВС-Новомосковск",
+              "K_median": 34.5,
+              "K_avg": 40.1,
+              "avg_workers": 47.8,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Стирол-Нижнекамск (1)",
+              "K_median": 40.5,
+              "K_avg": 48.0,
+              "avg_workers": 48.0,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГСП2-БГХК-УстьЛуга",
+              "K_median": 41.0,
+              "K_avg": 41.0,
+              "avg_workers": 39.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Medium": {
+          "projects_count": 9,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 53.0,
+              "mean": 55.3,
+              "min": 8.3,
+              "max": 118.0,
+              "std_dev": 34.0
+            },
+            "without_outliers": {
+              "median": 53.0,
+              "mean": 55.3,
+              "min": 8.3,
+              "max": 118.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 38.25,
+            "q3": 73.5,
+            "iqr": 35.25,
+            "lower_bound": -14.62,
+            "upper_bound": 126.38,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023)",
+              "K_median": 8.3,
+              "K_avg": 8.4,
+              "avg_workers": 117.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НЛМК-НЛМК-Липецк (2022-2023)",
+              "K_median": 14.6,
+              "K_avg": 14.3,
+              "avg_workers": 84.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (4)",
+              "K_median": 38.2,
+              "K_avg": 39.9,
+              "avg_workers": 118.3,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЗСНХ-ЗапСибНефтехим-Тобольск (2025-2026)",
+              "K_median": 47.2,
+              "K_avg": 49.0,
+              "avg_workers": 93.1,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть(Изоляция)-ОНПЗ-Омск (2023-2024)",
+              "K_median": 53.0,
+              "K_avg": 50.3,
+              "avg_workers": 56.1,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Казаньоргсинтез(Изоляция)-КОС-Казань (2023-2026)",
+              "K_median": 64.0,
+              "K_avg": 59.1,
+              "avg_workers": 73.4,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОГПЗ-РВС-Оренбург",
+              "K_median": 73.5,
+              "K_avg": 91.0,
+              "avg_workers": 92.2,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 81.0,
+              "K_avg": 95.8,
+              "avg_workers": 138.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Лукойл-ННОС-Кстово (2023-2028)",
+              "K_median": 118.0,
+              "K_avg": 119.4,
+              "avg_workers": 123.6,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 3,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 41.1,
+              "mean": 50.1,
+              "min": 12.3,
+              "max": 97.0,
+              "std_dev": 43.1
+            },
+            "without_outliers": {
+              "median": 41.1,
+              "mean": 50.1,
+              "min": 12.3,
+              "max": 97.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023) (2)",
+              "K_median": 12.3,
+              "K_avg": 12.3,
+              "avg_workers": 197.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ(ЭПБ)-Промзона-Нижнекамск (2025-2026)",
+              "K_median": 41.1,
+              "K_avg": 46.7,
+              "avg_workers": 274.4,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АГПЗ-РВС-Астрахань",
+              "K_median": 97.0,
+              "K_avg": 150.4,
+              "avg_workers": 150.4,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Very Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 204.8,
+              "mean": 204.8,
+              "min": 204.8,
+              "max": 204.8,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 204.8,
+              "mean": 204.8,
+              "min": 204.8,
+              "max": 204.8
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АГХК-Благо.",
+              "K_median": 204.8,
+              "K_avg": 227.4,
+              "avg_workers": 479.4,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Инженер-конструктор / Техник-конструктор",
+      "scales": {
+        "Medium": {
+          "projects_count": 3,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 66.0,
+              "mean": 99.7,
+              "min": 44.0,
+              "max": 189.0,
+              "std_dev": 78.1
+            },
+            "without_outliers": {
+              "median": 66.0,
+              "mean": 99.7,
+              "min": 44.0,
+              "max": 189.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ГЗГПП-РВС-Оренбург",
+              "K_median": 44.0,
+              "K_avg": 59.8,
+              "avg_workers": 63.3,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОГПЗ-РВС-Оренбург",
+              "K_median": 66.0,
+              "K_avg": 62.6,
+              "avg_workers": 92.2,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГПНХС-РВС-Салават",
+              "K_median": 189.0,
+              "K_avg": 189.0,
+              "avg_workers": 59.7,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 89.0,
+              "mean": 89.0,
+              "min": 89.0,
+              "max": 89.0,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 89.0,
+              "mean": 89.0,
+              "min": 89.0,
+              "max": 89.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) АГПЗ-РВС-Астрахань",
+              "K_median": 89.0,
+              "K_avg": 148.4,
+              "avg_workers": 150.4,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Инспектор строительных лесов",
+      "scales": {
+        "Small": {
+          "projects_count": 2,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 15.2,
+              "mean": 15.2,
+              "min": 4.5,
+              "max": 26.0,
+              "std_dev": 15.2
+            },
+            "without_outliers": {
+              "median": 15.2,
+              "mean": 15.2,
+              "min": 4.5,
+              "max": 26.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) РХИ-АГПЗ-Благо.",
+              "K_median": 4.5,
+              "K_avg": 4.5,
+              "avg_workers": 5.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГПК-УстьЛуга",
+              "K_median": 26.0,
+              "K_avg": 30.4,
+              "avg_workers": 31.8,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Medium": {
+          "projects_count": 4,
+          "outliers_count": 1,
+          "statistics": {
+            "all_data": {
+              "median": 96.7,
+              "mean": 81.8,
+              "min": 31.0,
+              "max": 103.0,
+              "std_dev": 34.2
+            },
+            "without_outliers": {
+              "median": 101.3,
+              "mean": 98.8,
+              "min": 92.0,
+              "max": 103.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 92.0,
+            "q3": 103.0,
+            "iqr": 11.0,
+            "lower_bound": 75.5,
+            "upper_bound": 119.5,
+            "outliers": [
+              31.0
+            ]
+          },
+          "projects": [
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023)",
+              "K_median": 31.0,
+              "K_avg": 37.2,
+              "avg_workers": 117.2,
+              "months_with_data": 9,
+              "is_outlier": true,
+              "outlier_type": "low"
+            },
+            {
+              "project": "(RU) НЛМК-НЛМК-Липецк (2022-2023)",
+              "K_median": 92.0,
+              "K_avg": 84.3,
+              "avg_workers": 84.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 101.3,
+              "K_avg": 101.3,
+              "avg_workers": 138.6,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЗСНХ-ЗапСибНефтехим-Тобольск (2025-2026)",
+              "K_median": 103.0,
+              "K_avg": 101.8,
+              "avg_workers": 93.1,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 49.2,
+              "mean": 49.2,
+              "min": 49.2,
+              "max": 49.2,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 49.2,
+              "mean": 49.2,
+              "min": 49.2,
+              "max": 49.2
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023) (2)",
+              "K_median": 49.2,
+              "K_avg": 49.2,
+              "avg_workers": 197.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Кладовщик / Работник склада / Специалист ОМТС",
+      "scales": {
+        "Small": {
+          "projects_count": 9,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 32.0,
+              "mean": 29.3,
+              "min": 9.0,
+              "max": 49.0,
+              "std_dev": 16.0
+            },
+            "without_outliers": {
+              "median": 32.0,
+              "mean": 29.3,
+              "min": 9.0,
+              "max": 49.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 11.0,
+            "q3": 40.5,
+            "iqr": 29.5,
+            "lower_bound": -33.25,
+            "upper_bound": 84.75,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) РХИ-АГПЗ-Благо.",
+              "K_median": 9.0,
+              "K_avg": 9.0,
+              "avg_workers": 5.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Башнефть-Новойл-Уфа (2022-2023)",
+              "K_median": 9.5,
+              "K_avg": 9.8,
+              "avg_workers": 9.8,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Татнефть(сварка)-НКТУ-Нижнекамск (2025)",
+              "K_median": 11.0,
+              "K_avg": 11.0,
+              "avg_workers": 11.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) УМ-ГМК-Удокан",
+              "K_median": 28.5,
+              "K_avg": 36.7,
+              "avg_workers": 40.7,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГМК-Удокан",
+              "K_median": 32.0,
+              "K_avg": 30.0,
+              "avg_workers": 24.0,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-НМЗ-Норильск АРК",
+              "K_median": 36.5,
+              "K_avg": 34.4,
+              "avg_workers": 38.2,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Стирол-Нижнекамск (1)",
+              "K_median": 40.5,
+              "K_avg": 48.0,
+              "avg_workers": 48.0,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НАКАзот-РВС-Новомосковск",
+              "K_median": 47.5,
+              "K_avg": 47.5,
+              "avg_workers": 47.8,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГПК-УстьЛуга",
+              "K_median": 49.0,
+              "K_avg": 49.0,
+              "avg_workers": 31.8,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Medium": {
+          "projects_count": 12,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 72.5,
+              "mean": 85.9,
+              "min": 30.5,
+              "max": 189.0,
+              "std_dev": 51.2
+            },
+            "without_outliers": {
+              "median": 72.5,
+              "mean": 85.9,
+              "min": 30.5,
+              "max": 189.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 47.58,
+            "q3": 121.0,
+            "iqr": 73.42,
+            "lower_bound": -62.54,
+            "upper_bound": 231.12,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023)",
+              "K_median": 30.5,
+              "K_avg": 36.2,
+              "avg_workers": 117.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОГПЗ-РВС-Оренбург",
+              "K_median": 40.5,
+              "K_avg": 52.9,
+              "avg_workers": 92.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГЗГПП-РВС-Оренбург",
+              "K_median": 44.0,
+              "K_avg": 63.3,
+              "avg_workers": 63.3,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (4)",
+              "K_median": 47.6,
+              "K_avg": 56.0,
+              "avg_workers": 118.3,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НЛМК-НЛМК-Липецк (2022-2023)",
+              "K_median": 48.0,
+              "K_avg": 47.5,
+              "avg_workers": 84.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Казаньоргсинтез(Изоляция)-КОС-Казань (2023-2026)",
+              "K_median": 69.0,
+              "K_avg": 79.1,
+              "avg_workers": 73.4,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-АрктикСПГ2-Гыдан АРК",
+              "K_median": 76.0,
+              "K_avg": 69.4,
+              "avg_workers": 62.4,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 83.8,
+              "K_avg": 89.5,
+              "avg_workers": 138.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЗСНХ-ЗапСибНефтехим-Тобольск (2025-2026)",
+              "K_median": 120.0,
+              "K_avg": 120.0,
+              "avg_workers": 93.1,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ-Звезда-БолКамень",
+              "K_median": 121.0,
+              "K_avg": 124.1,
+              "avg_workers": 124.1,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Лукойл-ННОС-Кстово (2023-2028)",
+              "K_median": 161.0,
+              "K_avg": 173.6,
+              "avg_workers": 123.6,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГПНХС-РВС-Салават",
+              "K_median": 189.0,
+              "K_avg": 189.0,
+              "avg_workers": 59.7,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 4,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 81.2,
+              "mean": 78.5,
+              "min": 48.5,
+              "max": 103.0,
+              "std_dev": 25.8
+            },
+            "without_outliers": {
+              "median": 81.2,
+              "mean": 78.5,
+              "min": 48.5,
+              "max": 103.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 65.67,
+            "q3": 103.0,
+            "iqr": 37.33,
+            "lower_bound": 9.67,
+            "upper_bound": 159.0,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) АГПЗ-РВС-Астрахань",
+              "K_median": 48.5,
+              "K_avg": 77.2,
+              "avg_workers": 150.4,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023) (2)",
+              "K_median": 65.7,
+              "K_avg": 65.7,
+              "avg_workers": 197.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ(ЭПБ)-Промзона-Нижнекамск (2025-2026)",
+              "K_median": 96.8,
+              "K_avg": 115.3,
+              "avg_workers": 274.4,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (3)",
+              "K_median": 103.0,
+              "K_avg": 103.0,
+              "avg_workers": 206.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Very Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 493.5,
+              "mean": 493.5,
+              "min": 493.5,
+              "max": 493.5,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 493.5,
+              "mean": 493.5,
+              "min": 493.5,
+              "max": 493.5
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АГХК-Благо.",
+              "K_median": 493.5,
+              "K_avg": 479.4,
+              "avg_workers": 479.4,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Мастер",
+      "scales": {
+        "Small": {
+          "projects_count": 46,
+          "outliers_count": 1,
+          "statistics": {
+            "all_data": {
+              "median": 14.2,
+              "mean": 16.6,
+              "min": 2.0,
+              "max": 55.0,
+              "std_dev": 10.6
+            },
+            "without_outliers": {
+              "median": 13.5,
+              "mean": 15.7,
+              "min": 2.0,
+              "max": 38.2
+            }
+          },
+          "outlier_bounds": {
+            "q1": 9.0,
+            "q3": 22.25,
+            "iqr": 13.25,
+            "lower_bound": -10.88,
+            "upper_bound": 42.12,
+            "outliers": [
+              55.0
+            ]
+          },
+          "projects": [
+            {
+              "project": "(RU) Интра-Сахалин1-Чайво (2025)",
+              "K_median": 2.0,
+              "K_avg": 2.7,
+              "avg_workers": 2.7,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СЗСК-РВС-Сургут",
+              "K_median": 2.7,
+              "K_avg": 2.6,
+              "avg_workers": 6.0,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ(Изоляция)-АрктикСПГ2-Гыдан АРК",
+              "K_median": 2.7,
+              "K_avg": 2.7,
+              "avg_workers": 12.2,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Роснефть-ТНПЗ-Туапсе (2024-2026)",
+              "K_median": 4.0,
+              "K_avg": 5.4,
+              "avg_workers": 5.4,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ENEL-НевГРЭС-Невин.",
+              "K_median": 5.0,
+              "K_avg": 4.6,
+              "avg_workers": 4.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Башнефть-Новойл-Уфа (2022-2023)",
+              "K_median": 6.0,
+              "K_avg": 5.4,
+              "avg_workers": 9.8,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ENEL-КонГРЭС-Конаково",
+              "K_median": 7.0,
+              "K_avg": 6.2,
+              "avg_workers": 6.2,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Башнефтьстрой-Уфанефтехим-Уфа (2022-2023)",
+              "K_median": 7.0,
+              "K_avg": 7.5,
+              "avg_workers": 7.5,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ-АрктикСПГ2-Гыдан АРК",
+              "K_median": 7.2,
+              "K_avg": 7.0,
+              "avg_workers": 23.2,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) БМХ-СГОК-СтарыйОскол (2023)",
+              "K_median": 7.2,
+              "K_avg": 7.7,
+              "avg_workers": 14.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Спецмонтаж-ЯНОС-Ярославль (2023)",
+              "K_median": 8.0,
+              "K_avg": 10.3,
+              "avg_workers": 13.0,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-АГПЗ-Благо.",
+              "K_median": 9.0,
+              "K_avg": 9.0,
+              "avg_workers": 5.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Илим-БратскийЛПК-Братск (Весна 2022)",
+              "K_median": 9.1,
+              "K_avg": 12.2,
+              "avg_workers": 44.0,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ENEL-СуГРЭС-Екат.",
+              "K_median": 10.0,
+              "K_avg": 9.5,
+              "avg_workers": 12.6,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ПортБС-Диксон АРК",
+              "K_median": 10.2,
+              "K_avg": 10.2,
+              "avg_workers": 20.5,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РостовНП-РВС-Сальск",
+              "K_median": 11.0,
+              "K_avg": 11.0,
+              "avg_workers": 11.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ТАНЕКО-НКТУ-Нижнекамск (2023-2026)",
+              "K_median": 11.0,
+              "K_avg": 13.1,
+              "avg_workers": 13.1,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Илим-ИлимскийЛПК-УстьИлимск (2024-2025)",
+              "K_median": 12.0,
+              "K_avg": 16.7,
+              "avg_workers": 19.1,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОЭК-ННПЗ-Новокуйбышевск (2024)",
+              "K_median": 12.0,
+              "K_avg": 12.0,
+              "avg_workers": 12.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(KZ) AVC-ПНХЗ-Павлодар (2025)",
+              "K_median": 12.5,
+              "K_avg": 12.5,
+              "avg_workers": 25.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СОЮЗ-Россети-Москва",
+              "K_median": 13.0,
+              "K_avg": 10.8,
+              "avg_workers": 20.3,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ(ПромАльп)-ГМК-Удокан",
+              "K_median": 13.2,
+              "K_avg": 13.1,
+              "avg_workers": 24.1,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Хайдельберг-ЦМЗ-Новогуровский (2025)",
+              "K_median": 13.5,
+              "K_avg": 13.5,
+              "avg_workers": 27.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-НМЗ-Норильск",
+              "K_median": 15.0,
+              "K_avg": 15.0,
+              "avg_workers": 13.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Союз-ГостУкраина-Москва (2025)",
+              "K_median": 15.0,
+              "K_avg": 12.7,
+              "avg_workers": 10.5,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГСП2-БГХК-УстьЛуга",
+              "K_median": 16.1,
+              "K_avg": 16.1,
+              "avg_workers": 39.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(BY) ГрАЗОТ-РВС-Гродно",
+              "K_median": 16.5,
+              "K_avg": 15.8,
+              "avg_workers": 15.8,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НевАзот-НевАзот-Невин. (2025)",
+              "K_median": 17.2,
+              "K_avg": 17.2,
+              "avg_workers": 27.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-НМЗ-Норильск АРК",
+              "K_median": 19.0,
+              "K_avg": 18.0,
+              "avg_workers": 18.9,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГПК-УстьЛуга",
+              "K_median": 20.5,
+              "K_avg": 23.0,
+              "avg_workers": 31.8,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СОЮЗ-КАЗОТ-Кемерово",
+              "K_median": 21.0,
+              "K_avg": 20.3,
+              "avg_workers": 15.5,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Юнипро-РВС-Шатура",
+              "K_median": 21.0,
+              "K_avg": 21.0,
+              "avg_workers": 21.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-АГПЗ-Благо.",
+              "K_median": 21.2,
+              "K_avg": 21.6,
+              "avg_workers": 32.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Хайдельберг-ЦМЗ-Стерлитамак (2025)",
+              "K_median": 22.0,
+              "K_avg": 21.7,
+              "avg_workers": 21.7,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) УМ-ГМК-Удокан",
+              "K_median": 22.2,
+              "K_avg": 26.6,
+              "avg_workers": 40.7,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НАКАзот-РВС-Новомосковск",
+              "K_median": 22.9,
+              "K_avg": 21.9,
+              "avg_workers": 47.8,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-Променад-НовыйУренгой АРК",
+              "K_median": 24.0,
+              "K_avg": 18.7,
+              "avg_workers": 18.7,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-АГПЗ-Благо.",
+              "K_median": 24.5,
+              "K_avg": 23.9,
+              "avg_workers": 26.9,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЭрЛикид-РВС-Зеленоград",
+              "K_median": 25.0,
+              "K_avg": 25.0,
+              "avg_workers": 25.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Прайдекс-ВДНХ-Москва (2025)",
+              "K_median": 27.0,
+              "K_avg": 27.3,
+              "avg_workers": 22.6,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-Променад-НовыйУренгой АРК",
+              "K_median": 27.5,
+              "K_avg": 25.2,
+              "avg_workers": 24.3,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-НМЗ-Норильск АРК",
+              "K_median": 29.0,
+              "K_avg": 31.0,
+              "avg_workers": 38.2,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СОЮЗ-КСПортовая-Выборг",
+              "K_median": 32.5,
+              "K_avg": 32.5,
+              "avg_workers": 32.5,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГМК-Удокан",
+              "K_median": 34.5,
+              "K_avg": 34.5,
+              "avg_workers": 24.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Стирол-Нижнекамск (1)",
+              "K_median": 38.2,
+              "K_avg": 34.1,
+              "avg_workers": 48.0,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Устай-МНПЗ-Москва",
+              "K_median": 55.0,
+              "K_avg": 55.0,
+              "avg_workers": 44.0,
+              "months_with_data": 2,
+              "is_outlier": true,
+              "outlier_type": "high"
+            }
+          ]
+        },
+        "Medium": {
+          "projects_count": 16,
+          "outliers_count": 1,
+          "statistics": {
+            "all_data": {
+              "median": 23.8,
+              "mean": 24.5,
+              "min": 15.1,
+              "max": 46.8,
+              "std_dev": 7.8
+            },
+            "without_outliers": {
+              "median": 23.5,
+              "mean": 23.0,
+              "min": 15.1,
+              "max": 34.2
+            }
+          },
+          "outlier_bounds": {
+            "q1": 19.78,
+            "q3": 26.67,
+            "iqr": 6.89,
+            "lower_bound": 9.44,
+            "upper_bound": 37.0,
+            "outliers": [
+              46.75
+            ]
+          },
+          "projects": [
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023)",
+              "K_median": 15.1,
+              "K_avg": 14.8,
+              "avg_workers": 117.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НЛМК-НЛМК-Липецк (2022-2023)",
+              "K_median": 16.0,
+              "K_avg": 16.5,
+              "avg_workers": 84.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГПНХС-РВС-Салават",
+              "K_median": 16.6,
+              "K_avg": 16.8,
+              "avg_workers": 59.7,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЗСНХ-ЗапСибНефтехим-Тобольск (2025-2026)",
+              "K_median": 19.8,
+              "K_avg": 18.5,
+              "avg_workers": 93.1,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (4)",
+              "K_median": 19.8,
+              "K_avg": 20.3,
+              "avg_workers": 118.3,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(KZ) AVC-АНПЗ-Атырау (2025)",
+              "K_median": 20.8,
+              "K_avg": 20.8,
+              "avg_workers": 62.5,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Казаньоргсинтез(Изоляция)-КОС-Казань (2023-2026)",
+              "K_median": 22.5,
+              "K_avg": 24.4,
+              "avg_workers": 73.4,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 23.5,
+              "K_avg": 24.1,
+              "avg_workers": 138.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-АрктикСПГ2-Гыдан АРК",
+              "K_median": 24.1,
+              "K_avg": 25.2,
+              "avg_workers": 62.4,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-АГХК-Благо.",
+              "K_median": 24.7,
+              "K_avg": 24.0,
+              "avg_workers": 63.9,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Лукойл-ННОС-Кстово (2023-2028)",
+              "K_median": 24.7,
+              "K_avg": 25.1,
+              "avg_workers": 123.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть(Изоляция)-ОНПЗ-Омск (2023-2024)",
+              "K_median": 25.0,
+              "K_avg": 24.2,
+              "avg_workers": 56.1,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОГПЗ-РВС-Оренбург",
+              "K_median": 26.7,
+              "K_avg": 31.4,
+              "avg_workers": 92.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГЗГПП-РВС-Оренбург",
+              "K_median": 31.0,
+              "K_avg": 30.4,
+              "avg_workers": 63.3,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) КРСС-РВС-Кингисепп",
+              "K_median": 34.2,
+              "K_avg": 40.3,
+              "avg_workers": 59.7,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ-Звезда-БолКамень",
+              "K_median": 46.8,
+              "K_avg": 45.4,
+              "avg_workers": 124.1,
+              "months_with_data": 10,
+              "is_outlier": true,
+              "outlier_type": "high"
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 4,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 19.2,
+              "mean": 26.0,
+              "min": 14.7,
+              "max": 50.8,
+              "std_dev": 16.7
+            },
+            "without_outliers": {
+              "median": 19.2,
+              "mean": 26.0,
+              "min": 14.7,
+              "max": 50.8
+            }
+          },
+          "outlier_bounds": {
+            "q1": 17.91,
+            "q3": 50.8,
+            "iqr": 32.89,
+            "lower_bound": -31.43,
+            "upper_bound": 100.14,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (3)",
+              "K_median": 14.7,
+              "K_avg": 14.7,
+              "avg_workers": 206.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023) (2)",
+              "K_median": 17.9,
+              "K_avg": 17.9,
+              "avg_workers": 197.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ(ЭПБ)-Промзона-Нижнекамск (2025-2026)",
+              "K_median": 20.5,
+              "K_avg": 20.4,
+              "avg_workers": 274.4,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АГПЗ-РВС-Астрахань",
+              "K_median": 50.8,
+              "K_avg": 54.2,
+              "avg_workers": 150.4,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Very Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 24.2,
+              "mean": 24.2,
+              "min": 24.2,
+              "max": 24.2,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 24.2,
+              "mean": 24.2,
+              "min": 24.2,
+              "max": 24.2
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АГХК-Благо.",
+              "K_median": 24.2,
+              "K_avg": 24.8,
+              "avg_workers": 479.4,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Производитель работ",
+      "scales": {
+        "Small": {
+          "projects_count": 32,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 22.0,
+              "mean": 22.1,
+              "min": 2.0,
+              "max": 63.0,
+              "std_dev": 14.7
+            },
+            "without_outliers": {
+              "median": 22.0,
+              "mean": 22.1,
+              "min": 2.0,
+              "max": 63.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 10.0,
+            "q3": 32.25,
+            "iqr": 22.25,
+            "lower_bound": -23.38,
+            "upper_bound": 65.62,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) Интра-Сахалин1-Чайво (2025)",
+              "K_median": 2.0,
+              "K_avg": 2.7,
+              "avg_workers": 2.7,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ENEL-КонГРЭС-Конаково",
+              "K_median": 3.0,
+              "K_avg": 3.0,
+              "avg_workers": 6.2,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-АГПЗ-Благо.",
+              "K_median": 3.0,
+              "K_avg": 3.0,
+              "avg_workers": 5.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Сибур-Химпром-Пермь (2025)",
+              "K_median": 5.0,
+              "K_avg": 5.0,
+              "avg_workers": 5.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Башнефть-Новойл-Уфа (2022-2023)",
+              "K_median": 7.0,
+              "K_avg": 9.2,
+              "avg_workers": 9.8,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НОВАТЭК-РВС-Мурманск АРК",
+              "K_median": 8.0,
+              "K_avg": 8.0,
+              "avg_workers": 8.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Башнефтьстрой-Уфанефтехим-Уфа (2022-2023)",
+              "K_median": 9.0,
+              "K_avg": 8.3,
+              "avg_workers": 7.5,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ENEL-СуГРЭС-Екат.",
+              "K_median": 10.0,
+              "K_avg": 12.6,
+              "avg_workers": 12.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Роснефть-ТНПЗ-Туапсе (2024-2026)",
+              "K_median": 10.0,
+              "K_avg": 7.4,
+              "avg_workers": 5.4,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ТАНЕКО-НКТУ-Нижнекамск (2023-2026)",
+              "K_median": 11.0,
+              "K_avg": 14.0,
+              "avg_workers": 13.1,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Татнефть(сварка)-НКТУ-Нижнекамск (2025)",
+              "K_median": 11.0,
+              "K_avg": 11.0,
+              "avg_workers": 11.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Илим-ИлимскийЛПК-УстьИлимск (2024-2025)",
+              "K_median": 12.0,
+              "K_avg": 20.7,
+              "avg_workers": 19.1,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Спецмонтаж-ЯНОС-Ярославль (2023)",
+              "K_median": 15.0,
+              "K_avg": 13.0,
+              "avg_workers": 13.0,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Прайдекс-ВДНХ-Москва (2025)",
+              "K_median": 17.0,
+              "K_avg": 22.6,
+              "avg_workers": 22.6,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Илим-БратскийЛПК-Братск (Весна 2022)",
+              "K_median": 19.5,
+              "K_avg": 42.9,
+              "avg_workers": 44.0,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Юнипро-РВС-Шатура",
+              "K_median": 21.0,
+              "K_avg": 21.0,
+              "avg_workers": 21.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ-АрктикСПГ2-Гыдан АРК",
+              "K_median": 23.0,
+              "K_avg": 23.4,
+              "avg_workers": 23.2,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЛукомА-Самаранафта-Пересвет (2024-2025)",
+              "K_median": 24.0,
+              "K_avg": 21.3,
+              "avg_workers": 21.3,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(KZ) AVC-ПНХЗ-Павлодар (2025)",
+              "K_median": 25.0,
+              "K_avg": 25.0,
+              "avg_workers": 25.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГМК-Удокан",
+              "K_median": 26.5,
+              "K_avg": 24.0,
+              "avg_workers": 24.0,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НевАзот-НевАзот-Невин. (2025)",
+              "K_median": 27.0,
+              "K_avg": 27.0,
+              "avg_workers": 27.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Хайдельберг-ЦМЗ-Новогуровский (2025)",
+              "K_median": 27.0,
+              "K_avg": 27.0,
+              "avg_workers": 27.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СОЮЗ-Россети-Москва",
+              "K_median": 28.5,
+              "K_avg": 28.5,
+              "avg_workers": 20.3,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ(ПромАльп)-ГМК-Удокан",
+              "K_median": 31.0,
+              "K_avg": 31.0,
+              "avg_workers": 24.1,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НАКАзот-РВС-Новомосковск",
+              "K_median": 32.2,
+              "K_avg": 32.5,
+              "avg_workers": 47.8,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СОЮЗ-КСПортовая-Выборг",
+              "K_median": 33.0,
+              "K_avg": 33.0,
+              "avg_workers": 32.5,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-НМЗ-Норильск АРК",
+              "K_median": 38.0,
+              "K_avg": 38.2,
+              "avg_workers": 38.2,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Стирол-Нижнекамск (1)",
+              "K_median": 38.0,
+              "K_avg": 38.0,
+              "avg_workers": 48.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГСП2-БГХК-УстьЛуга",
+              "K_median": 39.0,
+              "K_avg": 39.0,
+              "avg_workers": 39.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГПК-УстьЛуга",
+              "K_median": 44.0,
+              "K_avg": 42.2,
+              "avg_workers": 31.8,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Устай-МНПЗ-Москва",
+              "K_median": 46.0,
+              "K_avg": 44.0,
+              "avg_workers": 44.0,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) УМ-ГМК-Удокан",
+              "K_median": 63.0,
+              "K_avg": 63.0,
+              "avg_workers": 40.7,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Medium": {
+          "projects_count": 15,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 77.5,
+              "mean": 79.6,
+              "min": 36.0,
+              "max": 143.0,
+              "std_dev": 32.1
+            },
+            "without_outliers": {
+              "median": 77.5,
+              "mean": 79.6,
+              "min": 36.0,
+              "max": 143.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 54.0,
+            "q3": 97.0,
+            "iqr": 43.0,
+            "lower_bound": -10.5,
+            "upper_bound": 161.5,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АрктикСПГ2-Гыдан АРК",
+              "K_median": 36.0,
+              "K_avg": 37.0,
+              "avg_workers": 62.4,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГПНХС-РВС-Салават",
+              "K_median": 48.0,
+              "K_avg": 73.2,
+              "avg_workers": 59.7,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) КРСС-РВС-Кингисепп",
+              "K_median": 50.0,
+              "K_avg": 59.7,
+              "avg_workers": 59.7,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть(Изоляция)-ОНПЗ-Омск (2023-2024)",
+              "K_median": 54.0,
+              "K_avg": 56.0,
+              "avg_workers": 56.1,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023)",
+              "K_median": 59.0,
+              "K_avg": 89.3,
+              "avg_workers": 117.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(KZ) AVC-АНПЗ-Атырау (2025)",
+              "K_median": 62.5,
+              "K_avg": 62.5,
+              "avg_workers": 62.5,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОГПЗ-РВС-Оренбург",
+              "K_median": 62.7,
+              "K_avg": 61.0,
+              "avg_workers": 92.2,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГЗГПП-РВС-Оренбург",
+              "K_median": 77.5,
+              "K_avg": 78.5,
+              "avg_workers": 63.3,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (4)",
+              "K_median": 79.0,
+              "K_avg": 80.6,
+              "avg_workers": 118.3,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЗСНХ-ЗапСибНефтехим-Тобольск (2025-2026)",
+              "K_median": 82.5,
+              "K_avg": 86.2,
+              "avg_workers": 93.1,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 89.2,
+              "K_avg": 109.0,
+              "avg_workers": 138.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НЛМК-НЛМК-Липецк (2022-2023)",
+              "K_median": 97.0,
+              "K_avg": 98.5,
+              "avg_workers": 84.3,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ-Звезда-БолКамень",
+              "K_median": 119.0,
+              "K_avg": 119.3,
+              "avg_workers": 124.1,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Лукойл-ННОС-Кстово (2023-2028)",
+              "K_median": 134.5,
+              "K_avg": 115.6,
+              "avg_workers": 123.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Казаньоргсинтез(Изоляция)-КОС-Казань (2023-2026)",
+              "K_median": 143.0,
+              "K_avg": 143.0,
+              "avg_workers": 73.4,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 4,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 169.1,
+              "mean": 150.0,
+              "min": 55.7,
+              "max": 206.0,
+              "std_dev": 69.1
+            },
+            "without_outliers": {
+              "median": 169.1,
+              "mean": 150.0,
+              "min": 55.7,
+              "max": 206.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 141.25,
+            "q3": 206.0,
+            "iqr": 64.75,
+            "lower_bound": 44.12,
+            "upper_bound": 303.12,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) АГПЗ-РВС-Астрахань",
+              "K_median": 55.7,
+              "K_avg": 53.9,
+              "avg_workers": 150.4,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ(ЭПБ)-Промзона-Нижнекамск (2025-2026)",
+              "K_median": 141.2,
+              "K_avg": 140.6,
+              "avg_workers": 274.4,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023) (2)",
+              "K_median": 197.0,
+              "K_avg": 197.0,
+              "avg_workers": 197.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (3)",
+              "K_median": 206.0,
+              "K_avg": 206.0,
+              "avg_workers": 206.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Very Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 90.2,
+              "mean": 90.2,
+              "min": 90.2,
+              "max": 90.2,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 90.2,
+              "mean": 90.2,
+              "min": 90.2,
+              "max": 90.2
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АГХК-Благо.",
+              "K_median": 90.2,
+              "K_avg": 97.6,
+              "avg_workers": 479.4,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Руководитель проекта",
+      "scales": {
+        "Small": {
+          "projects_count": 14,
+          "outliers_count": 1,
+          "statistics": {
+            "all_data": {
+              "median": 25.2,
+              "mean": 25.7,
+              "min": 4.0,
+              "max": 61.0,
+              "std_dev": 15.4
+            },
+            "without_outliers": {
+              "median": 25.0,
+              "mean": 23.0,
+              "min": 4.0,
+              "max": 46.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 16.0,
+            "q3": 33.0,
+            "iqr": 17.0,
+            "lower_bound": -9.5,
+            "upper_bound": 58.5,
+            "outliers": [
+              61.0
+            ]
+          },
+          "projects": [
+            {
+              "project": "(RU) СмНП-РВС-Смоленск",
+              "K_median": 4.0,
+              "K_avg": 4.0,
+              "avg_workers": 4.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НОВАТЭК-РВС-Мурманск АРК",
+              "K_median": 8.0,
+              "K_avg": 8.0,
+              "avg_workers": 8.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-АГПЗ-Благо.",
+              "K_median": 9.0,
+              "K_avg": 9.0,
+              "avg_workers": 5.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Спецмонтаж-ЯНОС-Ярославль (2023)",
+              "K_median": 16.0,
+              "K_avg": 16.0,
+              "avg_workers": 13.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СОЮЗ-КАЗОТ-Кемерово",
+              "K_median": 20.0,
+              "K_avg": 20.0,
+              "avg_workers": 15.5,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Хайдельберг-ЦМЗ-Стерлитамак (2025)",
+              "K_median": 22.0,
+              "K_avg": 21.7,
+              "avg_workers": 21.7,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЭрЛикид-РВС-Зеленоград",
+              "K_median": 25.0,
+              "K_avg": 25.0,
+              "avg_workers": 25.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-Променад-НовыйУренгой АРК",
+              "K_median": 25.5,
+              "K_avg": 24.3,
+              "avg_workers": 24.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГПК-УстьЛуга",
+              "K_median": 25.5,
+              "K_avg": 25.8,
+              "avg_workers": 31.8,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Хайдельберг-ЦМЗ-Новогуровский (2025)",
+              "K_median": 27.0,
+              "K_avg": 27.0,
+              "avg_workers": 27.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СОЮЗ-КСПортовая-Выборг",
+              "K_median": 33.0,
+              "K_avg": 35.6,
+              "avg_workers": 32.5,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-НМЗ-Норильск АРК",
+              "K_median": 38.0,
+              "K_avg": 37.4,
+              "avg_workers": 38.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Устай-МНПЗ-Москва",
+              "K_median": 46.0,
+              "K_avg": 44.0,
+              "avg_workers": 44.0,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НАКАзот-РВС-Новомосковск",
+              "K_median": 61.0,
+              "K_avg": 52.3,
+              "avg_workers": 47.8,
+              "months_with_data": 3,
+              "is_outlier": true,
+              "outlier_type": "high"
+            }
+          ]
+        },
+        "Medium": {
+          "projects_count": 10,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 109.2,
+              "mean": 108.7,
+              "min": 62.5,
+              "max": 168.0,
+              "std_dev": 36.5
+            },
+            "without_outliers": {
+              "median": 109.2,
+              "mean": 108.7,
+              "min": 62.5,
+              "max": 168.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 76.5,
+            "q3": 140.0,
+            "iqr": 63.5,
+            "lower_bound": -18.75,
+            "upper_bound": 235.25,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АрктикСПГ2-Гыдан АРК",
+              "K_median": 62.5,
+              "K_avg": 61.3,
+              "avg_workers": 62.4,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Казаньоргсинтез(Изоляция)-КОС-Казань (2023-2026)",
+              "K_median": 69.0,
+              "K_avg": 79.1,
+              "avg_workers": 73.4,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НЛМК-НЛМК-Липецк (2022-2023)",
+              "K_median": 76.5,
+              "K_avg": 74.8,
+              "avg_workers": 84.3,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОГПЗ-РВС-Оренбург",
+              "K_median": 80.0,
+              "K_avg": 92.2,
+              "avg_workers": 92.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023)",
+              "K_median": 108.0,
+              "K_avg": 117.2,
+              "avg_workers": 117.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЗСНХ-ЗапСибНефтехим-Тобольск (2025-2026)",
+              "K_median": 110.5,
+              "K_avg": 95.5,
+              "avg_workers": 93.1,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ-Звезда-БолКамень",
+              "K_median": 121.0,
+              "K_avg": 124.1,
+              "avg_workers": 124.1,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 140.0,
+              "K_avg": 130.2,
+              "avg_workers": 138.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Лукойл-ННОС-Кстово (2023-2028)",
+              "K_median": 151.0,
+              "K_avg": 134.1,
+              "avg_workers": 123.6,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (4)",
+              "K_median": 168.0,
+              "K_avg": 149.5,
+              "avg_workers": 118.3,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 4,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 201.5,
+              "mean": 193.6,
+              "min": 81.0,
+              "max": 290.5,
+              "std_dev": 86.1
+            },
+            "without_outliers": {
+              "median": 201.5,
+              "mean": 193.6,
+              "min": 81.0,
+              "max": 290.5
+            }
+          },
+          "outlier_bounds": {
+            "q1": 197.0,
+            "q3": 290.5,
+            "iqr": 93.5,
+            "lower_bound": 56.75,
+            "upper_bound": 430.75,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) АГПЗ-РВС-Астрахань",
+              "K_median": 81.0,
+              "K_avg": 87.8,
+              "avg_workers": 150.4,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023) (2)",
+              "K_median": 197.0,
+              "K_avg": 197.0,
+              "avg_workers": 197.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (3)",
+              "K_median": 206.0,
+              "K_avg": 206.0,
+              "avg_workers": 206.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ(ЭПБ)-Промзона-Нижнекамск (2025-2026)",
+              "K_median": 290.5,
+              "K_avg": 297.0,
+              "avg_workers": 274.4,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Very Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 491.0,
+              "mean": 491.0,
+              "min": 491.0,
+              "max": 491.0,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 491.0,
+              "mean": 491.0,
+              "min": 491.0,
+              "max": 491.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АГХК-Благо.",
+              "K_median": 491.0,
+              "K_avg": 415.9,
+              "avg_workers": 479.4,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Сотрудник службы безопасности",
+      "scales": {
+        "Small": {
+          "projects_count": 5,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 30.5,
+              "mean": 31.4,
+              "min": 26.0,
+              "max": 36.5,
+              "std_dev": 4.0
+            },
+            "without_outliers": {
+              "median": 30.5,
+              "mean": 31.4,
+              "min": 26.0,
+              "max": 36.5
+            }
+          },
+          "outlier_bounds": {
+            "q1": 30.0,
+            "q3": 34.0,
+            "iqr": 4.0,
+            "lower_bound": 24.0,
+            "upper_bound": 40.0,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) Илим-БратскийЛПК-Братск (Весна 2022)",
+              "K_median": 26.0,
+              "K_avg": 36.9,
+              "avg_workers": 44.0,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-АГПЗ-Благо.",
+              "K_median": 30.0,
+              "K_avg": 30.0,
+              "avg_workers": 32.6,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-АГПЗ-Благо.",
+              "K_median": 30.5,
+              "K_avg": 30.8,
+              "avg_workers": 26.9,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НАКАзот-РВС-Новомосковск",
+              "K_median": 34.0,
+              "K_avg": 34.0,
+              "avg_workers": 47.8,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-НМЗ-Норильск АРК",
+              "K_median": 36.5,
+              "K_avg": 32.7,
+              "avg_workers": 38.2,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Medium": {
+          "projects_count": 12,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 106.0,
+              "mean": 105.7,
+              "min": 49.0,
+              "max": 189.0,
+              "std_dev": 40.8
+            },
+            "without_outliers": {
+              "median": 106.0,
+              "mean": 105.7,
+              "min": 49.0,
+              "max": 189.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 80.5,
+            "q3": 134.5,
+            "iqr": 54.0,
+            "lower_bound": -0.5,
+            "upper_bound": 215.5,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ГЗГПП-РВС-Оренбург",
+              "K_median": 49.0,
+              "K_avg": 69.0,
+              "avg_workers": 63.3,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-АГХК-Благо.",
+              "K_median": 53.0,
+              "K_avg": 52.5,
+              "avg_workers": 63.9,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Казаньоргсинтез(Изоляция)-КОС-Казань (2023-2026)",
+              "K_median": 69.0,
+              "K_avg": 68.7,
+              "avg_workers": 73.4,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОГПЗ-РВС-Оренбург",
+              "K_median": 80.5,
+              "K_avg": 87.3,
+              "avg_workers": 92.2,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НЛМК-НЛМК-Липецк (2022-2023)",
+              "K_median": 92.0,
+              "K_avg": 79.0,
+              "avg_workers": 84.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (4)",
+              "K_median": 104.0,
+              "K_avg": 118.3,
+              "avg_workers": 118.3,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023)",
+              "K_median": 108.0,
+              "K_avg": 117.2,
+              "avg_workers": 117.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЗСНХ-ЗапСибНефтехим-Тобольск (2025-2026)",
+              "K_median": 118.0,
+              "K_avg": 105.0,
+              "avg_workers": 93.1,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ-Звезда-БолКамень",
+              "K_median": 121.0,
+              "K_avg": 124.1,
+              "avg_workers": 124.1,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Лукойл-ННОС-Кстово (2023-2028)",
+              "K_median": 134.5,
+              "K_avg": 123.6,
+              "avg_workers": 123.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 150.0,
+              "K_avg": 138.6,
+              "avg_workers": 138.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГПНХС-РВС-Салават",
+              "K_median": 189.0,
+              "K_avg": 189.0,
+              "avg_workers": 59.7,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 4,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 201.5,
+              "mean": 201.2,
+              "min": 89.0,
+              "max": 313.0,
+              "std_dev": 91.5
+            },
+            "without_outliers": {
+              "median": 201.5,
+              "mean": 201.2,
+              "min": 89.0,
+              "max": 313.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 197.0,
+            "q3": 313.0,
+            "iqr": 116.0,
+            "lower_bound": 23.0,
+            "upper_bound": 487.0,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) АГПЗ-РВС-Астрахань",
+              "K_median": 89.0,
+              "K_avg": 143.6,
+              "avg_workers": 150.4,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023) (2)",
+              "K_median": 197.0,
+              "K_avg": 197.0,
+              "avg_workers": 197.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (3)",
+              "K_median": 206.0,
+              "K_avg": 206.0,
+              "avg_workers": 206.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ(ЭПБ)-Промзона-Нижнекамск (2025-2026)",
+              "K_median": 313.0,
+              "K_avg": 306.3,
+              "avg_workers": 274.4,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Very Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 248.5,
+              "mean": 248.5,
+              "min": 248.5,
+              "max": 248.5,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 248.5,
+              "mean": 248.5,
+              "min": 248.5,
+              "max": 248.5
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АГХК-Благо.",
+              "K_median": 248.5,
+              "K_avg": 316.7,
+              "avg_workers": 479.4,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Специалист по общим вопросам / Административный работник",
+      "scales": {
+        "Small": {
+          "projects_count": 18,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 18.8,
+              "mean": 20.5,
+              "min": 4.0,
+              "max": 55.5,
+              "std_dev": 15.3
+            },
+            "without_outliers": {
+              "median": 18.8,
+              "mean": 20.5,
+              "min": 4.0,
+              "max": 55.5
+            }
+          },
+          "outlier_bounds": {
+            "q1": 7.0,
+            "q3": 26.5,
+            "iqr": 19.5,
+            "lower_bound": -22.25,
+            "upper_bound": 55.75,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) СмНП-РВС-Смоленск",
+              "K_median": 4.0,
+              "K_avg": 4.0,
+              "avg_workers": 4.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-АГПЗ-Благо.",
+              "K_median": 4.5,
+              "K_avg": 4.5,
+              "avg_workers": 5.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ENEL-НевГРЭС-Невин.",
+              "K_median": 5.0,
+              "K_avg": 5.0,
+              "avg_workers": 4.6,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ТАНЕКО-НКТУ-Нижнекамск (2023-2026)",
+              "K_median": 6.5,
+              "K_avg": 6.4,
+              "avg_workers": 13.1,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ENEL-КонГРЭС-Конаково",
+              "K_median": 7.0,
+              "K_avg": 6.2,
+              "avg_workers": 6.2,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Башнефть-Новойл-Уфа (2022-2023)",
+              "K_median": 7.0,
+              "K_avg": 9.0,
+              "avg_workers": 9.8,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ENEL-СуГРЭС-Екат.",
+              "K_median": 12.0,
+              "K_avg": 13.2,
+              "avg_workers": 12.6,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГМК-Удокан",
+              "K_median": 13.2,
+              "K_avg": 12.0,
+              "avg_workers": 24.0,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(BY) ГрАЗОТ-РВС-Гродно",
+              "K_median": 16.5,
+              "K_avg": 15.8,
+              "avg_workers": 15.8,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СОЮЗ-КАЗОТ-Кемерово",
+              "K_median": 21.0,
+              "K_avg": 20.3,
+              "avg_workers": 15.5,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Илим-БратскийЛПК-Братск (Весна 2022)",
+              "K_median": 23.0,
+              "K_avg": 46.4,
+              "avg_workers": 44.0,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГПК-УстьЛуга",
+              "K_median": 24.0,
+              "K_avg": 25.6,
+              "avg_workers": 31.8,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-Променад-НовыйУренгой АРК",
+              "K_median": 25.5,
+              "K_avg": 23.1,
+              "avg_workers": 24.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-АГПЗ-Благо.",
+              "K_median": 26.5,
+              "K_avg": 24.0,
+              "avg_workers": 32.6,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НАКАзот-РВС-Новомосковск",
+              "K_median": 32.2,
+              "K_avg": 32.5,
+              "avg_workers": 47.8,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-НМЗ-Норильск АРК",
+              "K_median": 38.0,
+              "K_avg": 33.5,
+              "avg_workers": 38.2,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) УМ-ГМК-Удокан",
+              "K_median": 48.0,
+              "K_avg": 49.4,
+              "avg_workers": 40.7,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Стирол-Нижнекамск (1)",
+              "K_median": 55.5,
+              "K_avg": 55.5,
+              "avg_workers": 48.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Medium": {
+          "projects_count": 15,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 46.8,
+              "mean": 52.4,
+              "min": 27.0,
+              "max": 87.0,
+              "std_dev": 20.3
+            },
+            "without_outliers": {
+              "median": 46.8,
+              "mean": 52.4,
+              "min": 27.0,
+              "max": 87.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 31.6,
+            "q3": 76.0,
+            "iqr": 44.4,
+            "lower_bound": -35.0,
+            "upper_bound": 142.6,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ГЗГПП-РВС-Оренбург",
+              "K_median": 27.0,
+              "K_avg": 47.8,
+              "avg_workers": 63.3,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 30.6,
+              "K_avg": 29.3,
+              "avg_workers": 138.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Казаньоргсинтез(Изоляция)-КОС-Казань (2023-2026)",
+              "K_median": 30.8,
+              "K_avg": 30.4,
+              "avg_workers": 73.4,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (4)",
+              "K_median": 31.6,
+              "K_avg": 31.6,
+              "avg_workers": 118.3,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023)",
+              "K_median": 40.7,
+              "K_avg": 44.4,
+              "avg_workers": 117.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЗСНХ-ЗапСибНефтехим-Тобольск (2025-2026)",
+              "K_median": 40.7,
+              "K_avg": 43.3,
+              "avg_workers": 93.1,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ-Звезда-БолКамень",
+              "K_median": 42.5,
+              "K_avg": 43.1,
+              "avg_workers": 124.1,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НЛМК-НЛМК-Липецк (2022-2023)",
+              "K_median": 46.8,
+              "K_avg": 44.1,
+              "avg_workers": 84.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть(Изоляция)-ОНПЗ-Омск (2023-2024)",
+              "K_median": 53.0,
+              "K_avg": 50.3,
+              "avg_workers": 56.1,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-АрктикСПГ2-Гыдан АРК",
+              "K_median": 54.5,
+              "K_avg": 58.8,
+              "avg_workers": 62.4,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Лукойл-ННОС-Кстово (2023-2028)",
+              "K_median": 67.2,
+              "K_avg": 63.2,
+              "avg_workers": 123.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-АГХК-Благо.",
+              "K_median": 76.0,
+              "K_avg": 80.7,
+              "avg_workers": 63.9,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГПНХС-РВС-Салават",
+              "K_median": 76.8,
+              "K_avg": 76.8,
+              "avg_workers": 59.7,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОГПЗ-РВС-Оренбург",
+              "K_median": 80.5,
+              "K_avg": 83.9,
+              "avg_workers": 92.2,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) КРСС-РВС-Кингисепп",
+              "K_median": 87.0,
+              "K_avg": 72.7,
+              "avg_workers": 59.7,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 4,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 58.6,
+              "mean": 58.7,
+              "min": 40.5,
+              "max": 77.3,
+              "std_dev": 16.1
+            },
+            "without_outliers": {
+              "median": 58.6,
+              "mean": 58.7,
+              "min": 40.5,
+              "max": 77.3
+            }
+          },
+          "outlier_bounds": {
+            "q1": 51.5,
+            "q3": 77.29,
+            "iqr": 25.79,
+            "lower_bound": 12.81,
+            "upper_bound": 115.98,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) АГПЗ-РВС-Астрахань",
+              "K_median": 40.5,
+              "K_avg": 58.9,
+              "avg_workers": 150.4,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (3)",
+              "K_median": 51.5,
+              "K_avg": 51.5,
+              "avg_workers": 206.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023) (2)",
+              "K_median": 65.7,
+              "K_avg": 65.7,
+              "avg_workers": 197.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ(ЭПБ)-Промзона-Нижнекамск (2025-2026)",
+              "K_median": 77.3,
+              "K_avg": 71.4,
+              "avg_workers": 274.4,
+              "months_with_data": 8,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Very Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 98.7,
+              "mean": 98.7,
+              "min": 98.7,
+              "max": 98.7,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 98.7,
+              "mean": 98.7,
+              "min": 98.7,
+              "max": 98.7
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АГХК-Благо.",
+              "K_median": 98.7,
+              "K_avg": 89.5,
+              "avg_workers": 479.4,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Специалист по охране труда",
+      "scales": {
+        "Small": {
+          "projects_count": 16,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 29.2,
+              "mean": 30.9,
+              "min": 7.5,
+              "max": 97.0,
+              "std_dev": 23.1
+            },
+            "without_outliers": {
+              "median": 29.2,
+              "mean": 30.9,
+              "min": 7.5,
+              "max": 97.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 12.0,
+            "q3": 47.0,
+            "iqr": 35.0,
+            "lower_bound": -40.5,
+            "upper_bound": 99.5,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) РХИ-ГМК-Удокан",
+              "K_median": 7.5,
+              "K_avg": 9.9,
+              "avg_workers": 24.0,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-АГПЗ-Благо.",
+              "K_median": 9.0,
+              "K_avg": 9.0,
+              "avg_workers": 5.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ТАНЕКО-НКТУ-Нижнекамск (2023-2026)",
+              "K_median": 9.0,
+              "K_avg": 9.5,
+              "avg_workers": 13.1,
+              "months_with_data": 4,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Башнефть-Новойл-Уфа (2022-2023)",
+              "K_median": 12.0,
+              "K_avg": 10.7,
+              "avg_workers": 9.8,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ(ПромАльп)-ГМК-Удокан",
+              "K_median": 12.0,
+              "K_avg": 12.0,
+              "avg_workers": 24.1,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ-Стирол-Нижнекамск (1)",
+              "K_median": 20.5,
+              "K_avg": 26.5,
+              "avg_workers": 48.0,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) СОЮЗ-КАЗОТ-Кемерово",
+              "K_median": 21.0,
+              "K_avg": 21.0,
+              "avg_workers": 15.5,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-АГПЗ-Благо.",
+              "K_median": 29.0,
+              "K_avg": 26.9,
+              "avg_workers": 26.9,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-НМЗ-Норильск АРК",
+              "K_median": 29.5,
+              "K_avg": 29.6,
+              "avg_workers": 38.2,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) РХИ-ГПК-УстьЛуга",
+              "K_median": 30.0,
+              "K_avg": 31.8,
+              "avg_workers": 31.8,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-АГПЗ-Благо.",
+              "K_median": 31.5,
+              "K_avg": 31.5,
+              "avg_workers": 32.6,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НАКАзот-РВС-Новомосковск",
+              "K_median": 34.0,
+              "K_avg": 41.8,
+              "avg_workers": 47.8,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) УМ-ГМК-Удокан",
+              "K_median": 47.0,
+              "K_avg": 45.1,
+              "avg_workers": 40.7,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Илим-ИлимскийЛПК-УстьИлимск (2024-2025)",
+              "K_median": 50.0,
+              "K_avg": 40.0,
+              "avg_workers": 19.1,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Устай-МНПЗ-Москва",
+              "K_median": 55.0,
+              "K_avg": 55.0,
+              "avg_workers": 44.0,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Илим-БратскийЛПК-Братск (Весна 2022)",
+              "K_median": 97.0,
+              "K_avg": 99.3,
+              "avg_workers": 44.0,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Medium": {
+          "projects_count": 15,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 49.5,
+              "mean": 54.3,
+              "min": 20.0,
+              "max": 99.0,
+              "std_dev": 21.7
+            },
+            "without_outliers": {
+              "median": 49.5,
+              "mean": 54.3,
+              "min": 20.0,
+              "max": 99.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": 39.33,
+            "q3": 76.75,
+            "iqr": 37.42,
+            "lower_bound": -16.79,
+            "upper_bound": 132.88,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (4)",
+              "K_median": 20.0,
+              "K_avg": 21.7,
+              "avg_workers": 118.3,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 33.5,
+              "K_avg": 35.6,
+              "avg_workers": 138.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ-АрктикСПГ2-Гыдан АРК",
+              "K_median": 39.3,
+              "K_avg": 42.6,
+              "avg_workers": 62.4,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023)",
+              "K_median": 39.3,
+              "K_avg": 37.5,
+              "avg_workers": 117.2,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НЛМК-НЛМК-Липецк (2022-2023)",
+              "K_median": 41.8,
+              "K_avg": 47.8,
+              "avg_workers": 84.3,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Казаньоргсинтез(Изоляция)-КОС-Казань (2023-2026)",
+              "K_median": 44.5,
+              "K_avg": 41.9,
+              "avg_workers": 73.4,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГЗГПП-РВС-Оренбург",
+              "K_median": 49.0,
+              "K_avg": 69.0,
+              "avg_workers": 63.3,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ВСМ(ПромАльп)-АГХК-Благо.",
+              "K_median": 49.5,
+              "K_avg": 49.2,
+              "avg_workers": 63.9,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Лукойл-ННОС-Кстово (2023-2028)",
+              "K_median": 51.0,
+              "K_avg": 43.8,
+              "avg_workers": 123.6,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ЗСНХ-ЗапСибНефтехим-Тобольск (2025-2026)",
+              "K_median": 51.5,
+              "K_avg": 52.8,
+              "avg_workers": 93.1,
+              "months_with_data": 6,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть(Изоляция)-ОНПЗ-Омск (2023-2024)",
+              "K_median": 53.0,
+              "K_avg": 50.3,
+              "avg_workers": 56.1,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ГПНХС-РВС-Салават",
+              "K_median": 76.8,
+              "K_avg": 76.8,
+              "avg_workers": 59.7,
+              "months_with_data": 2,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) ОГПЗ-РВС-Оренбург",
+              "K_median": 80.0,
+              "K_avg": 77.2,
+              "avg_workers": 92.2,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) КРСС-РВС-Кингисепп",
+              "K_median": 87.0,
+              "K_avg": 72.7,
+              "avg_workers": 59.7,
+              "months_with_data": 3,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АСПГ-Звезда-БолКамень",
+              "K_median": 99.0,
+              "K_avg": 101.4,
+              "avg_workers": 124.1,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Large": {
+          "projects_count": 4,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 56.4,
+              "mean": 62.9,
+              "min": 34.3,
+              "max": 104.3,
+              "std_dev": 30.1
+            },
+            "without_outliers": {
+              "median": 56.4,
+              "mean": 62.9,
+              "min": 34.3,
+              "max": 104.3
+            }
+          },
+          "outlier_bounds": {
+            "q1": 49.25,
+            "q3": 104.33,
+            "iqr": 55.08,
+            "lower_bound": -33.38,
+            "upper_bound": 186.96,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) НКНХ-Этилен-Нижнекамск (3)",
+              "K_median": 34.3,
+              "K_avg": 34.3,
+              "avg_workers": 206.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) Газпромнефть-ОНПЗ-Омск (2022-2023) (2)",
+              "K_median": 49.2,
+              "K_avg": 49.2,
+              "avg_workers": 197.0,
+              "months_with_data": 1,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) АГПЗ-РВС-Астрахань",
+              "K_median": 63.5,
+              "K_avg": 63.3,
+              "avg_workers": 150.4,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            },
+            {
+              "project": "(RU) НКНХ(ЭПБ)-Промзона-Нижнекамск (2025-2026)",
+              "K_median": 104.3,
+              "K_avg": 135.8,
+              "avg_workers": 274.4,
+              "months_with_data": 5,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Very Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 48.1,
+              "mean": 48.1,
+              "min": 48.1,
+              "max": 48.1,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 48.1,
+              "mean": 48.1,
+              "min": 48.1,
+              "max": 48.1
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АГХК-Благо.",
+              "K_median": 48.1,
+              "K_avg": 50.5,
+              "avg_workers": 479.4,
+              "months_with_data": 10,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "position_group": "Специалист по сопровождению групп",
+      "scales": {
+        "Medium": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 157.0,
+              "mean": 157.0,
+              "min": 157.0,
+              "max": 157.0,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 157.0,
+              "mean": 157.0,
+              "min": 157.0,
+              "max": 157.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-ГПК-УстьЛуга",
+              "K_median": 157.0,
+              "K_avg": 138.9,
+              "avg_workers": 138.6,
+              "months_with_data": 9,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        },
+        "Very Large": {
+          "projects_count": 1,
+          "outliers_count": 0,
+          "statistics": {
+            "all_data": {
+              "median": 233.0,
+              "mean": 233.0,
+              "min": 233.0,
+              "max": 233.0,
+              "std_dev": 0
+            },
+            "without_outliers": {
+              "median": 233.0,
+              "mean": 233.0,
+              "min": 233.0,
+              "max": 233.0
+            }
+          },
+          "outlier_bounds": {
+            "q1": null,
+            "q3": null,
+            "iqr": null,
+            "lower_bound": null,
+            "upper_bound": null,
+            "outliers": []
+          },
+          "projects": [
+            {
+              "project": "(RU) ВСМ-АГХК-Благо.",
+              "K_median": 233.0,
+              "K_avg": 239.6,
+              "avg_workers": 479.4,
+              "months_with_data": 7,
+              "is_outlier": false,
+              "outlier_type": null
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

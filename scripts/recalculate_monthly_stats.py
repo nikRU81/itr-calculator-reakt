@@ -1,0 +1,513 @@
+#!/usr/bin/env python3
+"""
+Скрипт для пересчёта статистики ИТР с использованием помесячных данных.
+
+Текущий метод (неправильный):
+- Считает уникальных людей за весь период (Январь-Октябрь)
+- Это завышает количество, т.к. люди работают несколько месяцев
+
+Правильный метод:
+- Для каждого проекта+месяца считаем уникальных ИТР и рабочих
+- Вычисляем K коэффициент за каждый месяц
+- Агрегируем через средневзвешенное (взвешенное по количеству рабочих)
+"""
+
+import json
+from pathlib import Path
+from collections import defaultdict
+import statistics
+
+# Пути к файлам данных
+DATA_DIR = Path(__file__).parent.parent / "public" / "data"
+ITR_FILE = DATA_DIR / "itr_data_2025.json"
+WORKERS_FILE = DATA_DIR / "workers_data_2025.json"
+PROJECTS_OUTPUT = DATA_DIR / "projects_analysis.json"
+POSITION_OUTPUT = DATA_DIR / "position_distribution.json"
+POSITION_NORMS_OUTPUT = DATA_DIR / "position_norms_by_scale.json"  # Новый файл со сводкой K
+MONTHLY_DETAILS_OUTPUT = DATA_DIR / "monthly_calculation_details.json"  # Детали помесячного расчёта
+
+# Порядок месяцев
+MONTHS_ORDER = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
+                "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+
+# Классификация масштаба проекта
+def get_project_scale(avg_workers: float) -> str:
+    if avg_workers < 50:
+        return "Small"
+    elif avg_workers < 150:
+        return "Medium"
+    elif avg_workers < 300:
+        return "Large"
+    else:
+        return "Very Large"
+
+
+def load_json(filepath: Path) -> list:
+    """Загружает JSON файл."""
+    with open(filepath, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+
+def save_json(filepath: Path, data: list) -> None:
+    """Сохраняет JSON файл с форматированием."""
+    with open(filepath, 'w', encoding='utf-8') as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def detect_outliers_iqr(values: list, multiplier: float = 1.5) -> dict:
+    """
+    Определяет выбросы по методу IQR (Interquartile Range).
+    Выбросы - значения ниже Q1-1.5*IQR или выше Q3+1.5*IQR.
+    """
+    if len(values) < 4:
+        return {
+            'q1': None,
+            'q3': None,
+            'iqr': None,
+            'lower_bound': None,
+            'upper_bound': None,
+            'outliers': []
+        }
+
+    sorted_values = sorted(values)
+    n = len(sorted_values)
+
+    q1_idx = n // 4
+    q3_idx = (3 * n) // 4
+
+    q1 = sorted_values[q1_idx]
+    q3 = sorted_values[q3_idx]
+    iqr = q3 - q1
+
+    lower_bound = q1 - multiplier * iqr
+    upper_bound = q3 + multiplier * iqr
+
+    outliers = [v for v in values if v < lower_bound or v > upper_bound]
+
+    return {
+        'q1': round(q1, 2),
+        'q3': round(q3, 2),
+        'iqr': round(iqr, 2),
+        'lower_bound': round(lower_bound, 2),
+        'upper_bound': round(upper_bound, 2),
+        'outliers': outliers
+    }
+
+
+def calculate_monthly_stats():
+    """Основная функция расчёта помесячной статистики."""
+    print("Загрузка данных...")
+    itr_data = load_json(ITR_FILE)
+    workers_data = load_json(WORKERS_FILE)
+
+    print(f"  ITR записей: {len(itr_data)}")
+    print(f"  Workers записей: {len(workers_data)}")
+
+    # Группируем ITR по проекту и месяцу
+    # Структура: {project: {month: {position_group: set(personnel_numbers)}}}
+    itr_by_project_month = defaultdict(lambda: defaultdict(lambda: defaultdict(set)))
+    itr_hours_by_project_month = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+
+    for record in itr_data:
+        project = record['project']
+        month = record['month']
+        position_group = record['position_group']
+        personnel_number = record['personnel_number']
+        hours = record.get('hours', 0)
+
+        itr_by_project_month[project][month][position_group].add(personnel_number)
+        itr_hours_by_project_month[project][month][position_group] += hours
+
+    # Группируем Workers по проекту и месяцу
+    # Структура: {project: {month: set(personnel_numbers)}}
+    workers_by_project_month = defaultdict(lambda: defaultdict(set))
+    workers_hours_by_project_month = defaultdict(lambda: defaultdict(int))
+
+    for record in workers_data:
+        project = record['project']
+        month = record['month']
+        personnel_number = record['personnel_number']
+        hours = record.get('hours', 0)
+
+        workers_by_project_month[project][month].add(personnel_number)
+        workers_hours_by_project_month[project][month] += hours
+
+    # Получаем все проекты
+    all_projects = set(itr_by_project_month.keys()) | set(workers_by_project_month.keys())
+    print(f"\nВсего проектов: {len(all_projects)}")
+
+    # Рассчитываем статистику для каждого проекта
+    projects_analysis = []
+    position_distribution = []
+
+    # Для расчёта средневзвешенных K коэффициентов по масштабам
+    k_by_scale_position = defaultdict(lambda: defaultdict(list))
+
+    for project in sorted(all_projects):
+        # Собираем помесячные данные
+        monthly_workers = []  # [(month, count)]
+        monthly_itr = []  # [(month, count)]
+        monthly_hours_workers = []
+        monthly_hours_itr = []
+        monthly_itr_per_100 = []  # [(month, ratio, workers_count)]
+
+        # Помесячная статистика по должностям
+        # {position_group: [(month, itr_count, workers_count, K)]}
+        position_monthly = defaultdict(list)
+
+        for month in MONTHS_ORDER:
+            workers_count = len(workers_by_project_month[project].get(month, set()))
+            workers_hours = workers_hours_by_project_month[project].get(month, 0)
+
+            if workers_count > 0:
+                monthly_workers.append((month, workers_count))
+                monthly_hours_workers.append(workers_hours)
+
+                # Считаем ITR за этот месяц
+                itr_count_total = 0
+                itr_hours_total = 0
+
+                for position_group, personnel_set in itr_by_project_month[project].get(month, {}).items():
+                    itr_count = len(personnel_set)
+                    itr_count_total += itr_count
+                    itr_hours_total += itr_hours_by_project_month[project][month][position_group]
+
+                    # K коэффициент для этой должности в этом месяце
+                    K = workers_count / itr_count if itr_count > 0 else None
+                    position_monthly[position_group].append({
+                        'month': month,
+                        'itr_count': itr_count,
+                        'workers_count': workers_count,
+                        'K': K
+                    })
+
+                if itr_count_total > 0:
+                    monthly_itr.append((month, itr_count_total))
+                    monthly_hours_itr.append(itr_hours_total)
+                    itr_per_100 = (itr_count_total / workers_count) * 100
+                    monthly_itr_per_100.append((month, itr_per_100, workers_count))
+
+        if not monthly_workers:
+            continue
+
+        # Рассчитываем средневзвешенные показатели для проекта
+        total_workers_weight = sum(w[1] for w in monthly_workers)
+        avg_workers = total_workers_weight / len(monthly_workers) if monthly_workers else 0
+
+        # Средневзвешенное ITR per 100 workers
+        if monthly_itr_per_100:
+            weighted_sum = sum(ratio * weight for _, ratio, weight in monthly_itr_per_100)
+            total_weight = sum(weight for _, _, weight in monthly_itr_per_100)
+            avg_itr_per_100 = weighted_sum / total_weight if total_weight > 0 else 0
+        else:
+            avg_itr_per_100 = 0
+
+        # Медианные значения для более устойчивой оценки
+        itr_counts = [itr[1] for itr in monthly_itr]
+        workers_counts = [w[1] for w in monthly_workers]
+
+        median_itr = statistics.median(itr_counts) if itr_counts else 0
+        median_workers = statistics.median(workers_counts) if workers_counts else 0
+
+        # Общие часы (сумма за все месяцы)
+        total_workers_hours = sum(monthly_hours_workers)
+        total_itr_hours = sum(monthly_hours_itr)
+
+        # FTE (Full-Time Equivalent) - 200 часов в месяц
+        workers_fte = round(total_workers_hours / 200, 2)
+        itr_fte = round(total_itr_hours / 200, 2)
+
+        # Уникальные люди за весь период (для справки)
+        unique_itr = set()
+        for month_data in itr_by_project_month[project].values():
+            for personnel_set in month_data.values():
+                unique_itr.update(personnel_set)
+
+        unique_workers = set()
+        for month_personnel in workers_by_project_month[project].values():
+            unique_workers.update(month_personnel)
+
+        project_scale = get_project_scale(avg_workers)
+
+        # Формируем запись для projects_analysis
+        project_record = {
+            "project": project,
+            "itr_count": len(unique_itr),  # Уникальные ИТР за период (для совместимости)
+            "itr_count_avg_monthly": round(statistics.mean(itr_counts), 1) if itr_counts else 0,
+            "itr_count_median_monthly": round(median_itr, 1),
+            "itr_hours": total_itr_hours,
+            "workers_count": len(unique_workers),  # Уникальные рабочие за период
+            "workers_count_avg_monthly": round(avg_workers, 1),
+            "workers_count_median_monthly": round(median_workers, 1),
+            "workers_hours": total_workers_hours,
+            "itr_per_100_workers": round(avg_itr_per_100, 2),  # Средневзвешенный показатель
+            "itr_fte": itr_fte,
+            "workers_fte": workers_fte,
+            "project_scale": project_scale,
+            "months_active": len(monthly_workers)
+        }
+        projects_analysis.append(project_record)
+
+        # Формируем записи для position_distribution
+        for position_group, monthly_data in position_monthly.items():
+            if not monthly_data:
+                continue
+
+            # Считаем средневзвешенное количество ИТР этой должности
+            weighted_itr_sum = sum(d['itr_count'] * d['workers_count'] for d in monthly_data)
+            total_weight = sum(d['workers_count'] for d in monthly_data)
+            avg_itr_count = weighted_itr_sum / total_weight if total_weight > 0 else 0
+
+            # Медиана количества ИТР
+            itr_counts_pos = [d['itr_count'] for d in monthly_data]
+            median_itr_count = statistics.median(itr_counts_pos) if itr_counts_pos else 0
+
+            # K коэффициенты (только где есть ИТР)
+            k_values = [d['K'] for d in monthly_data if d['K'] is not None]
+            if k_values:
+                avg_k = statistics.mean(k_values)
+                median_k = statistics.median(k_values)
+
+                # Добавляем в статистику по масштабам
+                k_by_scale_position[project_scale][position_group].append({
+                    'project': project,
+                    'K_avg': avg_k,
+                    'K_median': median_k,
+                    'avg_workers': avg_workers,
+                    'months': len(k_values)
+                })
+            else:
+                avg_k = None
+                median_k = None
+
+            position_record = {
+                "project": project,
+                "position_group": position_group,
+                "count": len(set().union(*(
+                    itr_by_project_month[project].get(m, {}).get(position_group, set())
+                    for m in MONTHS_ORDER
+                ))),  # Уникальные за период (для совместимости)
+                "count_avg_monthly": round(avg_itr_count, 2),
+                "count_median_monthly": round(median_itr_count, 1),
+                "K_avg": round(avg_k, 1) if avg_k else None,
+                "K_median": round(median_k, 1) if median_k else None,
+                "project_scale": project_scale,
+                "avg_workers_monthly": round(avg_workers, 1)
+            }
+            position_distribution.append(position_record)
+
+    # Сортируем projects_analysis по workers_count_avg_monthly (убывание)
+    projects_analysis.sort(key=lambda x: x['workers_count_avg_monthly'], reverse=True)
+
+    # Сортируем position_distribution по project, затем position_group
+    position_distribution.sort(key=lambda x: (x['project'], x['position_group']))
+
+    # Сохраняем результаты
+    print("\nСохранение результатов...")
+    save_json(PROJECTS_OUTPUT, projects_analysis)
+    print(f"  Сохранено {len(projects_analysis)} проектов в {PROJECTS_OUTPUT.name}")
+
+    save_json(POSITION_OUTPUT, position_distribution)
+    print(f"  Сохранено {len(position_distribution)} записей в {POSITION_OUTPUT.name}")
+
+    # Выводим сводную статистику по K коэффициентам
+    print("\n" + "="*60)
+    print("СВОДНАЯ СТАТИСТИКА K КОЭФФИЦИЕНТОВ ПО МАСШТАБАМ")
+    print("="*60)
+
+    for scale in ["Small", "Medium", "Large", "Very Large"]:
+        print(f"\n### Масштаб: {scale}")
+        positions_data = k_by_scale_position.get(scale, {})
+
+        if not positions_data:
+            print("  Нет данных")
+            continue
+
+        for position_group in sorted(positions_data.keys()):
+            projects_k = positions_data[position_group]
+            if not projects_k:
+                continue
+
+            # Взвешенное среднее K (взвешенное по avg_workers)
+            total_weight = sum(p['avg_workers'] for p in projects_k)
+            weighted_k = sum(p['K_median'] * p['avg_workers'] for p in projects_k) / total_weight if total_weight > 0 else 0
+
+            # Медиана K
+            k_medians = [p['K_median'] for p in projects_k]
+            overall_median_k = statistics.median(k_medians)
+
+            min_k = min(k_medians)
+            max_k = max(k_medians)
+
+            print(f"\n  {position_group}:")
+            print(f"    Проектов: {len(projects_k)}")
+            print(f"    K средневзвеш: {weighted_k:.1f}")
+            print(f"    K медиана:     {overall_median_k:.1f}")
+            print(f"    K диапазон:    {min_k:.1f} - {max_k:.1f}")
+
+    # Формируем сводный файл K коэффициентов для ВСЕХ должностей
+    print("\n" + "="*60)
+    print("СОЗДАНИЕ СВОДКИ K ДЛЯ ВСЕХ ДОЛЖНОСТЕЙ")
+    print("="*60)
+
+    position_norms_by_scale = {}
+
+    # Собираем все уникальные должности
+    all_positions = set()
+    for scale_data in k_by_scale_position.values():
+        all_positions.update(scale_data.keys())
+
+    for position_group in sorted(all_positions):
+        position_norms_by_scale[position_group] = {
+            "position_group": position_group,
+            "scales": {}
+        }
+
+        for scale in ["Small", "Medium", "Large", "Very Large"]:
+            positions_data = k_by_scale_position.get(scale, {})
+            if position_group in positions_data:
+                projects_k = positions_data[position_group]
+                k_medians = [p['K_median'] for p in projects_k]
+                k_avgs = [p['K_avg'] for p in projects_k]
+
+                if k_medians:
+                    # Взвешенное среднее K (взвешенное по avg_workers)
+                    total_weight = sum(p['avg_workers'] for p in projects_k)
+                    weighted_k = sum(p['K_median'] * p['avg_workers'] for p in projects_k) / total_weight if total_weight > 0 else 0
+
+                    position_norms_by_scale[position_group]["scales"][scale] = {
+                        "projects_count": len(projects_k),
+                        "K_median": round(statistics.median(k_medians), 1),
+                        "K_weighted": round(weighted_k, 1),
+                        "K_avg": round(statistics.mean(k_avgs), 1),
+                        "K_min": round(min(k_medians), 1),
+                        "K_max": round(max(k_medians), 1),
+                        "recommended_K": round(statistics.median(k_medians))  # Целое число для использования
+                    }
+                    print(f"  {position_group} [{scale}]: K={round(statistics.median(k_medians))} ({len(projects_k)} проектов)")
+
+    # Преобразуем в список для JSON
+    position_norms_list = list(position_norms_by_scale.values())
+
+    # Сохраняем
+    save_json(POSITION_NORMS_OUTPUT, position_norms_list)
+    print(f"\n  Сохранено {len(position_norms_list)} должностей в {POSITION_NORMS_OUTPUT.name}")
+
+    # Выводим сводную таблицу
+    print("\n" + "="*60)
+    print("СВОДНАЯ ТАБЛИЦА K КОЭФФИЦИЕНТОВ (рекомендуемые)")
+    print("="*60)
+    print(f"\n{'Должность':<55} | {'S':>5} | {'M':>5} | {'L':>5} | {'XL':>5}")
+    print("-" * 85)
+
+    for position_data in position_norms_list:
+        pos_name = position_data['position_group'][:50]
+        scales = position_data['scales']
+        s = scales.get('Small', {}).get('recommended_K', '-')
+        m = scales.get('Medium', {}).get('recommended_K', '-')
+        l = scales.get('Large', {}).get('recommended_K', '-')
+        xl = scales.get('Very Large', {}).get('recommended_K', '-')
+        print(f"{pos_name:<55} | {str(s):>5} | {str(m):>5} | {str(l):>5} | {str(xl):>5}")
+
+    # ============================================================
+    # ДЕТАЛЬНЫЙ РАСЧЁТ ПО МЕСЯЦАМ С ВЫБРОСАМИ
+    # ============================================================
+    print("\n" + "="*60)
+    print("ДЕТАЛЬНЫЙ РАСЧЁТ С ВЫЯВЛЕНИЕМ ВЫБРОСОВ")
+    print("="*60)
+
+    monthly_details = {
+        "generated_at": "2025-11-25",
+        "description": "Детальные данные помесячного расчёта K коэффициентов с выявлением выбросов по методу IQR",
+        "methodology": {
+            "outlier_method": "IQR (Interquartile Range)",
+            "outlier_formula": "Выброс если K < Q1-1.5*IQR или K > Q3+1.5*IQR",
+            "calculation": "K = workers_count / itr_count (количество рабочих на 1 специалиста)"
+        },
+        "positions": []
+    }
+
+    # Для каждой должности собираем детальные данные по масштабам
+    for position_group in sorted(all_positions):
+        position_details = {
+            "position_group": position_group,
+            "scales": {}
+        }
+
+        for scale in ["Small", "Medium", "Large", "Very Large"]:
+            positions_data = k_by_scale_position.get(scale, {})
+
+            if position_group not in positions_data:
+                continue
+
+            projects_k = positions_data[position_group]
+            if not projects_k:
+                continue
+
+            # Все K медианы по проектам
+            k_medians = [p['K_median'] for p in projects_k]
+
+            # Определяем выбросы
+            outlier_info = detect_outliers_iqr(k_medians)
+
+            # Формируем детали по каждому проекту
+            project_details = []
+            for proj_data in sorted(projects_k, key=lambda x: x['K_median']):
+                is_outlier = proj_data['K_median'] in outlier_info['outliers']
+
+                project_details.append({
+                    "project": proj_data['project'],
+                    "K_median": round(proj_data['K_median'], 1),
+                    "K_avg": round(proj_data['K_avg'], 1),
+                    "avg_workers": round(proj_data['avg_workers'], 1),
+                    "months_with_data": proj_data['months'],
+                    "is_outlier": is_outlier,
+                    "outlier_type": "low" if is_outlier and proj_data['K_median'] < (outlier_info['lower_bound'] or 0) else ("high" if is_outlier else None)
+                })
+
+            # Считаем статистику с и без выбросов
+            non_outlier_k = [k for k in k_medians if k not in outlier_info['outliers']]
+
+            scale_details = {
+                "projects_count": len(projects_k),
+                "outliers_count": len(outlier_info['outliers']),
+                "statistics": {
+                    "all_data": {
+                        "median": round(statistics.median(k_medians), 1),
+                        "mean": round(statistics.mean(k_medians), 1),
+                        "min": round(min(k_medians), 1),
+                        "max": round(max(k_medians), 1),
+                        "std_dev": round(statistics.stdev(k_medians), 1) if len(k_medians) > 1 else 0
+                    },
+                    "without_outliers": {
+                        "median": round(statistics.median(non_outlier_k), 1) if non_outlier_k else None,
+                        "mean": round(statistics.mean(non_outlier_k), 1) if non_outlier_k else None,
+                        "min": round(min(non_outlier_k), 1) if non_outlier_k else None,
+                        "max": round(max(non_outlier_k), 1) if non_outlier_k else None
+                    }
+                },
+                "outlier_bounds": outlier_info,
+                "projects": project_details
+            }
+
+            position_details["scales"][scale] = scale_details
+
+            # Выводим информацию о выбросах
+            if outlier_info['outliers']:
+                print(f"\n  {position_group} [{scale}]:")
+                print(f"    Всего проектов: {len(projects_k)}, выбросов: {len(outlier_info['outliers'])}")
+                print(f"    Границы IQR: [{outlier_info['lower_bound']:.1f} - {outlier_info['upper_bound']:.1f}]")
+                print(f"    Выбросы: {[round(o, 1) for o in outlier_info['outliers']]}")
+
+        if position_details["scales"]:
+            monthly_details["positions"].append(position_details)
+
+    # Сохраняем детальный файл
+    save_json(MONTHLY_DETAILS_OUTPUT, monthly_details)
+    print(f"\n  Сохранены детали расчёта в {MONTHLY_DETAILS_OUTPUT.name}")
+
+    return projects_analysis, position_distribution, position_norms_list
+
+
+if __name__ == "__main__":
+    calculate_monthly_stats()
