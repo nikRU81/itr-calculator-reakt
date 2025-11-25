@@ -24,6 +24,7 @@ WORKERS_FILE = DATA_DIR / "workers_data_2025.json"
 PROJECTS_OUTPUT = DATA_DIR / "projects_analysis.json"
 POSITION_OUTPUT = DATA_DIR / "position_distribution.json"
 POSITION_NORMS_OUTPUT = DATA_DIR / "position_norms_by_scale.json"  # Новый файл со сводкой K
+MONTHLY_DETAILS_OUTPUT = DATA_DIR / "monthly_calculation_details.json"  # Детали помесячного расчёта
 
 # Порядок месяцев
 MONTHS_ORDER = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
@@ -51,6 +52,46 @@ def save_json(filepath: Path, data: list) -> None:
     """Сохраняет JSON файл с форматированием."""
     with open(filepath, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+def detect_outliers_iqr(values: list, multiplier: float = 1.5) -> dict:
+    """
+    Определяет выбросы по методу IQR (Interquartile Range).
+    Выбросы - значения ниже Q1-1.5*IQR или выше Q3+1.5*IQR.
+    """
+    if len(values) < 4:
+        return {
+            'q1': None,
+            'q3': None,
+            'iqr': None,
+            'lower_bound': None,
+            'upper_bound': None,
+            'outliers': []
+        }
+
+    sorted_values = sorted(values)
+    n = len(sorted_values)
+
+    q1_idx = n // 4
+    q3_idx = (3 * n) // 4
+
+    q1 = sorted_values[q1_idx]
+    q3 = sorted_values[q3_idx]
+    iqr = q3 - q1
+
+    lower_bound = q1 - multiplier * iqr
+    upper_bound = q3 + multiplier * iqr
+
+    outliers = [v for v in values if v < lower_bound or v > upper_bound]
+
+    return {
+        'q1': round(q1, 2),
+        'q3': round(q3, 2),
+        'iqr': round(iqr, 2),
+        'lower_bound': round(lower_bound, 2),
+        'upper_bound': round(upper_bound, 2),
+        'outliers': outliers
+    }
 
 
 def calculate_monthly_stats():
@@ -367,6 +408,103 @@ def calculate_monthly_stats():
         l = scales.get('Large', {}).get('recommended_K', '-')
         xl = scales.get('Very Large', {}).get('recommended_K', '-')
         print(f"{pos_name:<55} | {str(s):>5} | {str(m):>5} | {str(l):>5} | {str(xl):>5}")
+
+    # ============================================================
+    # ДЕТАЛЬНЫЙ РАСЧЁТ ПО МЕСЯЦАМ С ВЫБРОСАМИ
+    # ============================================================
+    print("\n" + "="*60)
+    print("ДЕТАЛЬНЫЙ РАСЧЁТ С ВЫЯВЛЕНИЕМ ВЫБРОСОВ")
+    print("="*60)
+
+    monthly_details = {
+        "generated_at": "2025-11-25",
+        "description": "Детальные данные помесячного расчёта K коэффициентов с выявлением выбросов по методу IQR",
+        "methodology": {
+            "outlier_method": "IQR (Interquartile Range)",
+            "outlier_formula": "Выброс если K < Q1-1.5*IQR или K > Q3+1.5*IQR",
+            "calculation": "K = workers_count / itr_count (количество рабочих на 1 специалиста)"
+        },
+        "positions": []
+    }
+
+    # Для каждой должности собираем детальные данные по масштабам
+    for position_group in sorted(all_positions):
+        position_details = {
+            "position_group": position_group,
+            "scales": {}
+        }
+
+        for scale in ["Small", "Medium", "Large", "Very Large"]:
+            positions_data = k_by_scale_position.get(scale, {})
+
+            if position_group not in positions_data:
+                continue
+
+            projects_k = positions_data[position_group]
+            if not projects_k:
+                continue
+
+            # Все K медианы по проектам
+            k_medians = [p['K_median'] for p in projects_k]
+
+            # Определяем выбросы
+            outlier_info = detect_outliers_iqr(k_medians)
+
+            # Формируем детали по каждому проекту
+            project_details = []
+            for proj_data in sorted(projects_k, key=lambda x: x['K_median']):
+                is_outlier = proj_data['K_median'] in outlier_info['outliers']
+
+                project_details.append({
+                    "project": proj_data['project'],
+                    "K_median": round(proj_data['K_median'], 1),
+                    "K_avg": round(proj_data['K_avg'], 1),
+                    "avg_workers": round(proj_data['avg_workers'], 1),
+                    "months_with_data": proj_data['months'],
+                    "is_outlier": is_outlier,
+                    "outlier_type": "low" if is_outlier and proj_data['K_median'] < (outlier_info['lower_bound'] or 0) else ("high" if is_outlier else None)
+                })
+
+            # Считаем статистику с и без выбросов
+            non_outlier_k = [k for k in k_medians if k not in outlier_info['outliers']]
+
+            scale_details = {
+                "projects_count": len(projects_k),
+                "outliers_count": len(outlier_info['outliers']),
+                "statistics": {
+                    "all_data": {
+                        "median": round(statistics.median(k_medians), 1),
+                        "mean": round(statistics.mean(k_medians), 1),
+                        "min": round(min(k_medians), 1),
+                        "max": round(max(k_medians), 1),
+                        "std_dev": round(statistics.stdev(k_medians), 1) if len(k_medians) > 1 else 0
+                    },
+                    "without_outliers": {
+                        "median": round(statistics.median(non_outlier_k), 1) if non_outlier_k else None,
+                        "mean": round(statistics.mean(non_outlier_k), 1) if non_outlier_k else None,
+                        "min": round(min(non_outlier_k), 1) if non_outlier_k else None,
+                        "max": round(max(non_outlier_k), 1) if non_outlier_k else None
+                    }
+                },
+                "outlier_bounds": outlier_info,
+                "projects": project_details
+            }
+
+            position_details["scales"][scale] = scale_details
+
+            # Выводим информацию о выбросах
+            if outlier_info['outliers']:
+                print(f"\n  {position_group} [{scale}]:")
+                print(f"    Всего проектов: {len(projects_k)}, выбросов: {len(outlier_info['outliers'])}")
+                print(f"    Границы IQR: [{outlier_info['lower_bound']:.1f} - {outlier_info['upper_bound']:.1f}]")
+                print(f"    Выбросы: {[round(o, 1) for o in outlier_info['outliers']]}")
+
+        if position_details["scales"]:
+            monthly_details["positions"].append(position_details)
+
+    # Сохраняем детальный файл
+    save_json(MONTHLY_DETAILS_OUTPUT, monthly_details)
+    print(f"\n  Сохранены детали расчёта в {MONTHLY_DETAILS_OUTPUT.name}")
 
     return projects_analysis, position_distribution, position_norms_list
 
