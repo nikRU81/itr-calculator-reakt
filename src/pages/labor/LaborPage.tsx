@@ -3,8 +3,14 @@ import { TrendingUp, AlertTriangle, CheckCircle, BarChart3, Table, Info } from '
 import Card from '../../components/ui/Card';
 import MetricCard from '../../components/ui/MetricCard';
 import { Tabs, TabsList, Tab, TabsContent } from '../../components/ui/Tabs';
-import { loadProjects } from '../../utils/dataLoader';
-import type { Project } from '../../types';
+import { loadProjects, loadMonthlyDynamics } from '../../utils/dataLoader';
+import type { Project, MonthlyDynamicsRecord } from '../../types';
+
+// Интерфейс для проекта с усредненными помесячными данными
+interface ProjectWithMonthlyAvg extends Project {
+  avg_monthly_workers: number;
+  avg_monthly_itr: number;
+}
 import {
   BarChart,
   Bar,
@@ -18,7 +24,7 @@ import {
 } from 'recharts';
 
 export default function LaborPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<ProjectWithMonthlyAvg[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,9 +32,49 @@ export default function LaborPage() {
     async function loadData() {
       setLoading(true);
       try {
-        const projectsData = await loadProjects();
-        const validProjects = projectsData.filter(
-          (p) => p.itr_per_100_workers !== null && p.workers_count > 0
+        const [projectsData, monthlyData] = await Promise.all([
+          loadProjects(),
+          loadMonthlyDynamics(),
+        ]);
+
+        // Группируем помесячные данные по проектам и вычисляем средние значения
+        const monthlyByProject = new Map<string, MonthlyDynamicsRecord[]>();
+        for (const record of monthlyData.monthly_dynamics) {
+          const existing = monthlyByProject.get(record.project) || [];
+          existing.push(record);
+          monthlyByProject.set(record.project, existing);
+        }
+
+        // Добавляем средние помесячные значения к проектам
+        const projectsWithAvg: ProjectWithMonthlyAvg[] = projectsData.map((project) => {
+          const monthlyRecords = monthlyByProject.get(project.project) || [];
+          const monthCount = monthlyRecords.length;
+
+          let avgMonthlyWorkers = 0;
+          let avgMonthlyItr = 0;
+
+          if (monthCount > 0) {
+            const totalWorkers = monthlyRecords.reduce(
+              (sum, r) => sum + r.workers_unique_count,
+              0
+            );
+            const totalItr = monthlyRecords.reduce(
+              (sum, r) => sum + r.itr_unique_count,
+              0
+            );
+            avgMonthlyWorkers = totalWorkers / monthCount;
+            avgMonthlyItr = totalItr / monthCount;
+          }
+
+          return {
+            ...project,
+            avg_monthly_workers: avgMonthlyWorkers,
+            avg_monthly_itr: avgMonthlyItr,
+          };
+        });
+
+        const validProjects = projectsWithAvg.filter(
+          (p) => p.itr_per_100_workers !== null && p.avg_monthly_workers > 0
         );
         const sorted = [...validProjects].sort(
           (a, b) => b.itr_per_100_workers! - a.itr_per_100_workers!
@@ -89,7 +135,7 @@ export default function LaborPage() {
     index: index + 1,
     ratio: p.itr_per_100_workers,
     name: p.project,
-    workers: p.workers_count,
+    workers: Math.round(p.avg_monthly_workers),
   }));
 
   // Scale analysis
@@ -257,7 +303,7 @@ export default function LaborPage() {
                         <div className="bg-white p-2 border border-slate-200 rounded shadow text-xs">
                           <p className="font-semibold mb-1">{data.name}</p>
                           <p>ИТР/100: {data.ratio.toFixed(2)}</p>
-                          <p>Рабочих: {data.workers}</p>
+                          <p>Рабочих (ср./мес): {data.workers}</p>
                         </div>
                       );
                     }
@@ -282,8 +328,8 @@ export default function LaborPage() {
                   <tr>
                     <th>#</th>
                     <th>Проект</th>
-                    <th className="text-center">Рабочие</th>
-                    <th className="text-center">ИТР</th>
+                    <th className="text-center">Рабочие (ср./мес)</th>
+                    <th className="text-center">ИТР (ср./мес)</th>
                     <th className="text-center">ИТР/100</th>
                     <th className="text-center">Статус</th>
                   </tr>
@@ -306,9 +352,9 @@ export default function LaborPage() {
                         <td className="font-medium text-slate-900 max-w-[180px] truncate">
                           {project.project}
                         </td>
-                        <td className="text-center">{project.workers_count}</td>
+                        <td className="text-center">{Math.round(project.avg_monthly_workers)}</td>
                         <td className="text-center font-semibold text-primary-600">
-                          {project.itr_count}
+                          {Math.round(project.avg_monthly_itr)}
                         </td>
                         <td className="text-center">
                           <span className="inline-flex items-center justify-center px-2 py-0.5 bg-primary-100 text-primary-700 rounded text-xs font-semibold">

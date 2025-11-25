@@ -141,12 +141,16 @@ export default function AnalyticsPage() {
     );
   }
 
-  // Calculate statistics
+  // Calculate statistics (средние помесячные значения)
   const totalProjects = filteredProjects.length;
-  const totalITR = filteredProjects.reduce((sum, p) => sum + p.itr_count, 0);
-  const totalWorkers = filteredProjects.reduce((sum, p) => sum + p.workers_count, 0);
+  const avgMonthlyITR = Math.round(
+    filteredProjects.reduce((sum, p) => sum + p.avg_monthly_itr, 0)
+  );
+  const avgMonthlyWorkers = Math.round(
+    filteredProjects.reduce((sum, p) => sum + p.avg_monthly_workers, 0)
+  );
   const avgRatio =
-    totalWorkers > 0
+    avgMonthlyWorkers > 0
       ? filteredProjects
           .filter((p) => p.itr_per_100_workers !== null)
           .reduce((sum, p) => sum + p.itr_per_100_workers!, 0) /
@@ -177,10 +181,10 @@ export default function AnalyticsPage() {
   }));
 
   const scatterData = filteredProjects
-    .filter((p) => p.itr_per_100_workers !== null && p.workers_count > 0)
+    .filter((p) => p.itr_per_100_workers !== null && p.avg_monthly_workers > 0)
     .map((p) => ({
-      x: p.workers_count,
-      y: p.itr_count,
+      x: Math.round(p.avg_monthly_workers),
+      y: Math.round(p.avg_monthly_itr),
       z: p.itr_per_100_workers!,
       name: p.project,
       scale: p.project_scale,
@@ -197,14 +201,14 @@ export default function AnalyticsPage() {
           color="#4f46e5"
         />
         <MetricCard
-          label="Численность ИТР"
-          value={totalITR}
+          label="ИТР (ср./мес)"
+          value={avgMonthlyITR}
           icon={<Briefcase className="w-5 h-5" />}
           color="#10b981"
         />
         <MetricCard
-          label="Численность рабочих"
-          value={totalWorkers}
+          label="Рабочие (ср./мес)"
+          value={avgMonthlyWorkers}
           icon={<Users className="w-5 h-5" />}
           color="#06b6d4"
         />
@@ -395,23 +399,23 @@ export default function AnalyticsPage() {
 
         {/* Scatter Tab */}
         <TabsContent value="scatter">
-          <Card title="Соотношение рабочих и ИТР" className="p-4">
+          <Card title="Соотношение рабочих и ИТР (ср./мес)" className="p-4">
             <ResponsiveContainer width="100%" height={350}>
               <ScatterChart>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   type="number"
                   dataKey="x"
-                  name="Рабочие"
+                  name="Рабочие (ср./мес)"
                   tick={{ fontSize: 11 }}
-                  label={{ value: 'Рабочие', position: 'insideBottom', offset: -5, fontSize: 12 }}
+                  label={{ value: 'Рабочие (ср./мес)', position: 'insideBottom', offset: -5, fontSize: 12 }}
                 />
                 <YAxis
                   type="number"
                   dataKey="y"
-                  name="ИТР"
+                  name="ИТР (ср./мес)"
                   tick={{ fontSize: 11 }}
-                  label={{ value: 'ИТР', angle: -90, position: 'insideLeft', fontSize: 12 }}
+                  label={{ value: 'ИТР (ср./мес)', angle: -90, position: 'insideLeft', fontSize: 12 }}
                 />
                 <ZAxis type="number" dataKey="z" range={[50, 400]} />
                 <Tooltip
@@ -422,8 +426,8 @@ export default function AnalyticsPage() {
                       return (
                         <div className="bg-white p-2 border border-slate-200 rounded-lg shadow-lg text-xs">
                           <p className="font-semibold mb-1">{data.name}</p>
-                          <p className="text-slate-600">Рабочие: {data.x}</p>
-                          <p className="text-slate-600">ИТР: {data.y}</p>
+                          <p className="text-slate-600">Рабочие (ср./мес): {data.x}</p>
+                          <p className="text-slate-600">ИТР (ср./мес): {data.y}</p>
                           <p className="text-slate-600">Соотношение: {data.z.toFixed(2)}</p>
                         </div>
                       );
