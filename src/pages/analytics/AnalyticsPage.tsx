@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
   BarChart3,
   Building2,
@@ -9,6 +9,9 @@ import {
   Filter,
   Table,
   PieChart,
+  ZoomIn,
+  ZoomOut,
+  RotateCcw,
 } from 'lucide-react';
 import Card from '../../components/ui/Card';
 import MetricCard from '../../components/ui/MetricCard';
@@ -26,6 +29,8 @@ import {
   ScatterChart,
   Scatter,
   ZAxis,
+  ReferenceArea,
+  Cell,
 } from 'recharts';
 
 const SCALE_COLORS = {
@@ -34,6 +39,35 @@ const SCALE_COLORS = {
   Large: '#06b6d4',
   'Very Large': '#4f46e5',
 };
+
+// Цвета для категорий по нормативу ИТР/100
+const RATIO_COLORS = {
+  optimal: '#10b981', // Зеленый - оптимально (8-12)
+  low: '#f59e0b',     // Оранжевый - низкое (<8)
+  high: '#3b82f6',    // Синий - высокое (>12)
+};
+
+const OPTIMAL_RANGE = { min: 8, max: 12 };
+
+// Функция определения категории по нормативу
+const getRatioCategory = (ratio: number): 'optimal' | 'low' | 'high' => {
+  if (ratio >= OPTIMAL_RANGE.min && ratio <= OPTIMAL_RANGE.max) return 'optimal';
+  if (ratio < OPTIMAL_RANGE.min) return 'low';
+  return 'high';
+};
+
+// Интерфейс для зума
+interface ZoomState {
+  x1: number | null;
+  x2: number | null;
+  y1: number | null;
+  y2: number | null;
+  refAreaLeft: number | null;
+  refAreaRight: number | null;
+  refAreaTop: number | null;
+  refAreaBottom: number | null;
+  isZooming: boolean;
+}
 
 // Интерфейс для проекта с усредненными помесячными данными
 interface ProjectWithMonthlyAvg extends Project {
@@ -48,6 +82,20 @@ export default function AnalyticsPage() {
   const [scaleFilter, setScaleFilter] = useState<string>('all');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Состояние зума для Scatter графика
+  const [zoomState, setZoomState] = useState<ZoomState>({
+    x1: null,
+    x2: null,
+    y1: null,
+    y2: null,
+    refAreaLeft: null,
+    refAreaRight: null,
+    refAreaTop: null,
+    refAreaBottom: null,
+    isZooming: false,
+  });
+  const [zoomLevel, setZoomLevel] = useState(1);
 
   useEffect(() => {
     async function loadData() {
@@ -188,7 +236,125 @@ export default function AnalyticsPage() {
       z: p.itr_per_100_workers!,
       name: p.project,
       scale: p.project_scale,
+      category: getRatioCategory(p.itr_per_100_workers!),
     }));
+
+  // Вычисляем домены для осей (с учетом зума)
+  const xValues = scatterData.map((d) => d.x);
+  const yValues = scatterData.map((d) => d.y);
+  const baseXDomain = [0, Math.max(...xValues, 100) * 1.1];
+  const baseYDomain = [0, Math.max(...yValues, 50) * 1.1];
+
+  const getZoomedDomain = useCallback(
+    (baseDomain: number[], axis: 'x' | 'y') => {
+      if (zoomState.x1 !== null && zoomState.x2 !== null && axis === 'x') {
+        return [Math.min(zoomState.x1, zoomState.x2), Math.max(zoomState.x1, zoomState.x2)];
+      }
+      if (zoomState.y1 !== null && zoomState.y2 !== null && axis === 'y') {
+        return [Math.min(zoomState.y1, zoomState.y2), Math.max(zoomState.y1, zoomState.y2)];
+      }
+      // Применяем уровень зума
+      if (zoomLevel > 1) {
+        const range = baseDomain[1] - baseDomain[0];
+        const center = range / 2;
+        const newRange = range / zoomLevel;
+        return [center - newRange / 2, center + newRange / 2];
+      }
+      return baseDomain;
+    },
+    [zoomState, zoomLevel]
+  );
+
+  const xDomain = getZoomedDomain(baseXDomain, 'x');
+  const yDomain = getZoomedDomain(baseYDomain, 'y');
+
+  // Обработчики зума
+  const handleMouseDown = (e: { xValue?: number; yValue?: number } | null) => {
+    if (e && e.xValue !== undefined && e.yValue !== undefined) {
+      setZoomState((prev) => ({
+        ...prev,
+        refAreaLeft: e.xValue!,
+        refAreaBottom: e.yValue!,
+        isZooming: true,
+      }));
+    }
+  };
+
+  const handleMouseMove = (e: { xValue?: number; yValue?: number } | null) => {
+    if (zoomState.isZooming && e && e.xValue !== undefined && e.yValue !== undefined) {
+      setZoomState((prev) => ({
+        ...prev,
+        refAreaRight: e.xValue!,
+        refAreaTop: e.yValue!,
+      }));
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (
+      zoomState.refAreaLeft !== null &&
+      zoomState.refAreaRight !== null &&
+      zoomState.refAreaBottom !== null &&
+      zoomState.refAreaTop !== null
+    ) {
+      const x1 = Math.min(zoomState.refAreaLeft, zoomState.refAreaRight);
+      const x2 = Math.max(zoomState.refAreaLeft, zoomState.refAreaRight);
+      const y1 = Math.min(zoomState.refAreaBottom, zoomState.refAreaTop);
+      const y2 = Math.max(zoomState.refAreaBottom, zoomState.refAreaTop);
+
+      // Только если выделена значимая область
+      if (x2 - x1 > 5 && y2 - y1 > 2) {
+        setZoomState({
+          x1,
+          x2,
+          y1,
+          y2,
+          refAreaLeft: null,
+          refAreaRight: null,
+          refAreaTop: null,
+          refAreaBottom: null,
+          isZooming: false,
+        });
+        setZoomLevel(1); // Сбрасываем уровень зума при выделении области
+      } else {
+        resetZoom();
+      }
+    } else {
+      setZoomState((prev) => ({
+        ...prev,
+        isZooming: false,
+        refAreaLeft: null,
+        refAreaRight: null,
+        refAreaTop: null,
+        refAreaBottom: null,
+      }));
+    }
+  };
+
+  const resetZoom = () => {
+    setZoomState({
+      x1: null,
+      x2: null,
+      y1: null,
+      y2: null,
+      refAreaLeft: null,
+      refAreaRight: null,
+      refAreaTop: null,
+      refAreaBottom: null,
+      isZooming: false,
+    });
+    setZoomLevel(1);
+  };
+
+  const zoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev * 1.5, 10));
+    setZoomState((prev) => ({ ...prev, x1: null, x2: null, y1: null, y2: null }));
+  };
+
+  const zoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev / 1.5, 1));
+    setZoomState((prev) => ({ ...prev, x1: null, x2: null, y1: null, y2: null }));
+  };
 
   return (
     <div className="space-y-4">
@@ -400,14 +566,56 @@ export default function AnalyticsPage() {
         {/* Scatter Tab */}
         <TabsContent value="scatter">
           <Card title="Соотношение рабочих и ИТР (ср./мес)" className="p-4">
-            <ResponsiveContainer width="100%" height={350}>
-              <ScatterChart>
+            {/* Панель управления зумом */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={zoomIn}
+                  className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors"
+                  title="Приблизить"
+                >
+                  <ZoomIn className="w-4 h-4 text-slate-600" />
+                </button>
+                <button
+                  onClick={zoomOut}
+                  className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors"
+                  title="Отдалить"
+                  disabled={zoomLevel <= 1 && zoomState.x1 === null}
+                >
+                  <ZoomOut className="w-4 h-4 text-slate-600" />
+                </button>
+                <button
+                  onClick={resetZoom}
+                  className="p-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors"
+                  title="Сбросить зум"
+                >
+                  <RotateCcw className="w-4 h-4 text-slate-600" />
+                </button>
+                {(zoomLevel > 1 || zoomState.x1 !== null) && (
+                  <span className="text-xs text-slate-500 ml-2">
+                    Зум: {zoomLevel > 1 ? `${zoomLevel.toFixed(1)}x` : 'область'}
+                  </span>
+                )}
+              </div>
+              <p className="text-xs text-slate-500">
+                Выделите область мышью для приближения
+              </p>
+            </div>
+
+            <ResponsiveContainer width="100%" height={400}>
+              <ScatterChart
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={handleMouseUp}
+              >
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis
                   type="number"
                   dataKey="x"
                   name="Рабочие (ср./мес)"
                   tick={{ fontSize: 11 }}
+                  domain={xDomain}
+                  allowDataOverflow
                   label={{ value: 'Рабочие (ср./мес)', position: 'insideBottom', offset: -5, fontSize: 12 }}
                 />
                 <YAxis
@@ -415,32 +623,100 @@ export default function AnalyticsPage() {
                   dataKey="y"
                   name="ИТР (ср./мес)"
                   tick={{ fontSize: 11 }}
+                  domain={yDomain}
+                  allowDataOverflow
                   label={{ value: 'ИТР (ср./мес)', angle: -90, position: 'insideLeft', fontSize: 12 }}
                 />
-                <ZAxis type="number" dataKey="z" range={[50, 400]} />
+                <ZAxis type="number" dataKey="z" range={[60, 300]} />
                 <Tooltip
                   cursor={{ strokeDasharray: '3 3' }}
                   content={({ active, payload }) => {
                     if (active && payload && payload.length) {
                       const data = payload[0].payload;
+                      const categoryName =
+                        data.category === 'optimal'
+                          ? 'Оптимально'
+                          : data.category === 'low'
+                          ? 'Низкое'
+                          : 'Высокое';
+                      const categoryColor = RATIO_COLORS[data.category as keyof typeof RATIO_COLORS];
                       return (
                         <div className="bg-white p-2 border border-slate-200 rounded-lg shadow-lg text-xs">
                           <p className="font-semibold mb-1">{data.name}</p>
                           <p className="text-slate-600">Рабочие (ср./мес): {data.x}</p>
                           <p className="text-slate-600">ИТР (ср./мес): {data.y}</p>
-                          <p className="text-slate-600">Соотношение: {data.z.toFixed(2)}</p>
+                          <p className="text-slate-600">ИТР/100: {data.z.toFixed(2)}</p>
+                          <p style={{ color: categoryColor }} className="font-semibold mt-1">
+                            {categoryName}
+                          </p>
                         </div>
                       );
                     }
                     return null;
                   }}
                 />
-                <Scatter data={scatterData} fill="#4f46e5" />
+                <Scatter data={scatterData} shape="circle">
+                  {scatterData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={RATIO_COLORS[entry.category]}
+                      fillOpacity={0.8}
+                    />
+                  ))}
+                </Scatter>
+                {/* Область выделения для зума */}
+                {zoomState.refAreaLeft !== null && zoomState.refAreaRight !== null && (
+                  <ReferenceArea
+                    x1={zoomState.refAreaLeft}
+                    x2={zoomState.refAreaRight}
+                    y1={zoomState.refAreaBottom ?? undefined}
+                    y2={zoomState.refAreaTop ?? undefined}
+                    strokeOpacity={0.3}
+                    fill="#4f46e5"
+                    fillOpacity={0.1}
+                  />
+                )}
               </ScatterChart>
             </ResponsiveContainer>
-            <p className="text-xs text-slate-500 text-center mt-2">
-              Размер точки соответствует соотношению ИТР/100 рабочих
-            </p>
+
+            {/* Легенда */}
+            <div className="mt-4 p-3 bg-slate-50 rounded-lg">
+              <p className="text-xs text-slate-700 font-semibold mb-2">
+                Цветовая кодировка по нормативу ИТР/100 рабочих:
+              </p>
+              <div className="flex flex-wrap gap-4 items-center justify-center">
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: RATIO_COLORS.optimal }}
+                  />
+                  <span className="text-xs text-slate-700">
+                    Оптимально ({OPTIMAL_RANGE.min}-{OPTIMAL_RANGE.max})
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: RATIO_COLORS.low }}
+                  />
+                  <span className="text-xs text-slate-700">
+                    Низкое (&lt;{OPTIMAL_RANGE.min})
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-4 h-4 rounded-full"
+                    style={{ backgroundColor: RATIO_COLORS.high }}
+                  />
+                  <span className="text-xs text-slate-700">
+                    Высокое (&gt;{OPTIMAL_RANGE.max})
+                  </span>
+                </div>
+              </div>
+              <p className="text-xs text-slate-500 text-center mt-2">
+                Размер точки соответствует соотношению ИТР/100 рабочих
+              </p>
+            </div>
           </Card>
         </TabsContent>
       </Tabs>
