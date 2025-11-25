@@ -318,7 +318,7 @@ export default function StandardsPage() {
       avgK: avgK.toFixed(1),
       minK: Math.min(...kValues).toFixed(1),
       maxK: Math.max(...kValues).toFixed(1),
-      recommendedK: Math.round(medianK / 5) * 5 || Math.round(medianK), // Округляем до 5 или до целого
+      recommendedK: Math.round(medianK), // Округляем медиану до целого
       // Старые показатели для сравнения
       medianOld: medianOld.toFixed(1),
     };
