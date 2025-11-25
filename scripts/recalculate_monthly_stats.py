@@ -13,9 +13,19 @@
 """
 
 import json
+import math
 from pathlib import Path
 from collections import defaultdict
 import statistics
+
+
+def js_round(x: float) -> int:
+    """
+    Округление как в JavaScript Math.round().
+    Python round() использует banker's rounding (к четному при .5),
+    JavaScript всегда округляет .5 вверх.
+    """
+    return math.floor(x + 0.5)
 
 # Пути к файлам данных
 DATA_DIR = Path(__file__).parent.parent / "public" / "data"
@@ -382,9 +392,9 @@ def calculate_monthly_stats():
                         "K_avg": round(statistics.mean(k_avgs), 1),
                         "K_min": round(min(k_medians), 1),
                         "K_max": round(max(k_medians), 1),
-                        "recommended_K": round(statistics.median(k_medians))  # Целое число для использования
+                        "recommended_K": js_round(statistics.median(k_medians))  # Округление как в JS
                     }
-                    print(f"  {position_group} [{scale}]: K={round(statistics.median(k_medians))} ({len(projects_k)} проектов)")
+                    print(f"  {position_group} [{scale}]: K={js_round(statistics.median(k_medians))} ({len(projects_k)} проектов)")
 
     # Преобразуем в список для JSON
     position_norms_list = list(position_norms_by_scale.values())
