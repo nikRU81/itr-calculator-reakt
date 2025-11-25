@@ -13,8 +13,8 @@ import {
 import Card from '../../components/ui/Card';
 import MetricCard from '../../components/ui/MetricCard';
 import { Tabs, TabsList, Tab, TabsContent } from '../../components/ui/Tabs';
-import { loadProjects } from '../../utils/dataLoader';
-import type { Project } from '../../types';
+import { loadProjects, loadMonthlyDynamics } from '../../utils/dataLoader';
+import type { Project, MonthlyDynamicsRecord } from '../../types';
 import {
   BarChart,
   Bar,
@@ -35,9 +35,15 @@ const SCALE_COLORS = {
   'Very Large': '#4f46e5',
 };
 
+// Интерфейс для проекта с усредненными помесячными данными
+interface ProjectWithMonthlyAvg extends Project {
+  avg_monthly_workers: number;
+  avg_monthly_itr: number;
+}
+
 export default function AnalyticsPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [filteredProjects, setFilteredProjects] = useState<Project[]>([]);
+  const [projects, setProjects] = useState<ProjectWithMonthlyAvg[]>([]);
+  const [filteredProjects, setFilteredProjects] = useState<ProjectWithMonthlyAvg[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [scaleFilter, setScaleFilter] = useState<string>('all');
   const [loading, setLoading] = useState(true);
@@ -47,9 +53,49 @@ export default function AnalyticsPage() {
     async function loadData() {
       setLoading(true);
       try {
-        const projectsData = await loadProjects();
-        setProjects(projectsData);
-        setFilteredProjects(projectsData);
+        const [projectsData, monthlyData] = await Promise.all([
+          loadProjects(),
+          loadMonthlyDynamics(),
+        ]);
+
+        // Группируем помесячные данные по проектам и вычисляем средние значения
+        const monthlyByProject = new Map<string, MonthlyDynamicsRecord[]>();
+        for (const record of monthlyData.monthly_dynamics) {
+          const existing = monthlyByProject.get(record.project) || [];
+          existing.push(record);
+          monthlyByProject.set(record.project, existing);
+        }
+
+        // Добавляем средние помесячные значения к проектам
+        const projectsWithAvg: ProjectWithMonthlyAvg[] = projectsData.map((project) => {
+          const monthlyRecords = monthlyByProject.get(project.project) || [];
+          const monthCount = monthlyRecords.length;
+
+          let avgMonthlyWorkers = 0;
+          let avgMonthlyItr = 0;
+
+          if (monthCount > 0) {
+            const totalWorkers = monthlyRecords.reduce(
+              (sum, r) => sum + r.workers_unique_count,
+              0
+            );
+            const totalItr = monthlyRecords.reduce(
+              (sum, r) => sum + r.itr_unique_count,
+              0
+            );
+            avgMonthlyWorkers = totalWorkers / monthCount;
+            avgMonthlyItr = totalItr / monthCount;
+          }
+
+          return {
+            ...project,
+            avg_monthly_workers: avgMonthlyWorkers,
+            avg_monthly_itr: avgMonthlyItr,
+          };
+        });
+
+        setProjects(projectsWithAvg);
+        setFilteredProjects(projectsWithAvg);
       } catch (err) {
         setError('Ошибка загрузки данных');
         console.error(err);
@@ -294,8 +340,8 @@ export default function AnalyticsPage() {
                   <tr>
                     <th>Проект</th>
                     <th className="text-center">Масштаб</th>
-                    <th className="text-center">Рабочие</th>
-                    <th className="text-center">ИТР</th>
+                    <th className="text-center">Рабочие (ср./мес)</th>
+                    <th className="text-center">ИТР (ср./мес)</th>
                     <th className="text-center">ИТР/100</th>
                   </tr>
                 </thead>
@@ -324,9 +370,9 @@ export default function AnalyticsPage() {
                             {scaleName}
                           </span>
                         </td>
-                        <td className="text-center">{project.workers_count}</td>
+                        <td className="text-center">{Math.round(project.avg_monthly_workers)}</td>
                         <td className="text-center font-semibold text-primary-600">
-                          {project.itr_count}
+                          {Math.round(project.avg_monthly_itr)}
                         </td>
                         <td className="text-center">
                           <span className="inline-flex items-center justify-center px-2 py-0.5 bg-primary-100 text-primary-700 rounded text-xs font-semibold">
