@@ -29,12 +29,13 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 const COLORS = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b'];
 
 // Определение масштабов проекта
-// Коэффициенты рассчитаны на основе анализа 74 реальных проектов
+// Коэффициенты рассчитаны на основе ПОМЕСЯЧНОГО анализа 74 реальных проектов
+// Данные: январь-октябрь 2025
 const PROJECT_SCALES = [
-  { code: 'S', name: 'Малый', workers: 'до 50', color: '#f59e0b', K_prorab: 30, K_master: 20, K_sklad: 40, scaleKey: 'Small' },
-  { code: 'M', name: 'Средний', workers: '50–150', color: '#10b981', K_prorab: 50, K_master: 25, K_sklad: 50, scaleKey: 'Medium' },
-  { code: 'L', name: 'Крупный', workers: '150–300', color: '#06b6d4', K_prorab: 70, K_master: 30, K_sklad: 60, scaleKey: 'Large' },
-  { code: 'XL', name: 'Очень крупный', workers: '300+', color: '#4f46e5', K_prorab: 100, K_master: 35, K_sklad: 80, scaleKey: 'Very Large' },
+  { code: 'S', name: 'Малый', workers: 'до 50', color: '#f59e0b', K_prorab: 22, K_master: 14, K_sklad: 32, scaleKey: 'Small' },
+  { code: 'M', name: 'Средний', workers: '50–150', color: '#10b981', K_prorab: 78, K_master: 24, K_sklad: 72, scaleKey: 'Medium' },
+  { code: 'L', name: 'Крупный', workers: '150–300', color: '#06b6d4', K_prorab: 120, K_master: 20, K_sklad: 80, scaleKey: 'Large' },
+  { code: 'XL', name: 'Очень крупный', workers: '300+', color: '#4f46e5', K_prorab: 90, K_master: 24, K_sklad: 100, scaleKey: 'Very Large' },
 ];
 
 // Классификация должностей
@@ -59,28 +60,42 @@ const POSITION_CLASSIFICATION = {
   ],
 };
 
-// Интерфейсы для данных
+// Интерфейсы для данных (с помесячной статистикой)
 interface PositionDistributionRecord {
   project: string;
   position_group: string;
   count: number;
+  count_avg_monthly?: number;
+  count_median_monthly?: number;
+  K_avg?: number | null;
+  K_median?: number | null;
+  project_scale?: string;
+  avg_workers_monthly?: number;
 }
 
 interface ProjectAnalysisRecord {
   project: string;
   itr_count: number;
+  itr_count_avg_monthly?: number;
+  itr_count_median_monthly?: number;
   workers_count: number;
+  workers_count_avg_monthly?: number;
+  workers_count_median_monthly?: number;
   project_scale: string;
   itr_per_100_workers: number | null;
+  months_active?: number;
 }
 
 // Объединённые данные проекта
 interface ProjectWithPosition {
   project: string;
   workers_count: number;
+  workers_count_monthly: number; // Помесячное среднее
   position_count: number;
+  position_count_monthly: number; // Помесячное среднее
   project_scale: string;
-  ratio: number | null; // рабочих на 1 специалиста
+  ratio: number | null; // рабочих на 1 специалиста (уникальных за период)
+  K_monthly: number | null; // K по помесячным данным
 }
 
 export default function StandardsPage() {
@@ -138,7 +153,7 @@ export default function StandardsPage() {
   const filteredProjectsWithPosition = useMemo(() => {
     if (!selectedPosition) return [];
 
-    // Получаем проекты с выбранной должностью
+    // Получаем проекты с выбранной должностью (уже с помесячными данными)
     const positionProjects = positionDistribution.filter(
       p => p.position_group === selectedPosition
     );
@@ -149,56 +164,77 @@ export default function StandardsPage() {
     for (const pp of positionProjects) {
       const projectData = projectsAnalysis.find(pa => pa.project === pp.project);
       if (projectData && projectData.workers_count > 0) {
-        // Фильтруем по масштабу
-        if (selectedScale !== 'all' && projectData.project_scale !== selectedScale) {
+        // Фильтруем по масштабу (используем масштаб из position_distribution или projects_analysis)
+        const scale = pp.project_scale || projectData.project_scale;
+        if (selectedScale !== 'all' && scale !== selectedScale) {
           continue;
         }
+
+        // Помесячные данные (новые поля)
+        const workersMonthly = pp.avg_workers_monthly || projectData.workers_count_avg_monthly || projectData.workers_count;
+        const positionMonthly = pp.count_avg_monthly || pp.count;
 
         result.push({
           project: pp.project,
           workers_count: projectData.workers_count,
+          workers_count_monthly: workersMonthly,
           position_count: pp.count,
-          project_scale: projectData.project_scale,
+          position_count_monthly: positionMonthly,
+          project_scale: scale,
           ratio: pp.count > 0 ? projectData.workers_count / pp.count : null,
+          K_monthly: pp.K_median || (positionMonthly > 0 ? workersMonthly / positionMonthly : null),
         });
       }
     }
 
-    // Сортируем по численности рабочих
-    return result.sort((a, b) => a.workers_count - b.workers_count);
+    // Сортируем по помесячному среднему рабочих
+    return result.sort((a, b) => a.workers_count_monthly - b.workers_count_monthly);
   }, [selectedPosition, selectedScale, positionDistribution, projectsAnalysis]);
 
-  // Статистика по выбранной должности
+  // Статистика по выбранной должности (с помесячными данными)
   const positionStats = useMemo(() => {
-    const data = filteredProjectsWithPosition.filter(p => p.ratio !== null && p.ratio > 0);
+    const data = filteredProjectsWithPosition.filter(p => p.K_monthly !== null && p.K_monthly > 0);
     if (data.length === 0) return null;
 
-    const ratios = data.map(p => p.ratio as number);
-    const totalWorkers = data.reduce((sum, p) => sum + p.workers_count, 0);
-    const totalPositions = data.reduce((sum, p) => sum + p.position_count, 0);
+    // K коэффициенты из помесячных данных
+    const kValues = data.map(p => p.K_monthly as number);
+    const totalWorkersMonthly = data.reduce((sum, p) => sum + p.workers_count_monthly, 0);
+    const totalPositionsMonthly = data.reduce((sum, p) => sum + p.position_count_monthly, 0);
 
-    // Средневзвешенное
-    const weightedAvg = totalWorkers / totalPositions;
+    // Средневзвешенное K (взвешенное по помесячному среднему рабочих)
+    const weightedK = data.reduce((sum, p) => sum + (p.K_monthly || 0) * p.workers_count_monthly, 0) / totalWorkersMonthly;
 
-    // Медиана
-    const sorted = [...ratios].sort((a, b) => a - b);
-    const median = sorted.length % 2 === 0
-      ? (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2
-      : sorted[Math.floor(sorted.length / 2)];
+    // Медиана K
+    const sortedK = [...kValues].sort((a, b) => a - b);
+    const medianK = sortedK.length % 2 === 0
+      ? (sortedK[sortedK.length / 2 - 1] + sortedK[sortedK.length / 2]) / 2
+      : sortedK[Math.floor(sortedK.length / 2)];
 
-    // Простое среднее
-    const avg = ratios.reduce((sum, r) => sum + r, 0) / ratios.length;
+    // Простое среднее K
+    const avgK = kValues.reduce((sum, k) => sum + k, 0) / kValues.length;
+
+    // Также рассчитаем старый показатель (по уникальным за период) для сравнения
+    const dataOld = filteredProjectsWithPosition.filter(p => p.ratio !== null && p.ratio > 0);
+    const ratiosOld = dataOld.map(p => p.ratio as number);
+    const sortedOld = [...ratiosOld].sort((a, b) => a - b);
+    const medianOld = sortedOld.length > 0
+      ? (sortedOld.length % 2 === 0
+        ? (sortedOld[sortedOld.length / 2 - 1] + sortedOld[sortedOld.length / 2]) / 2
+        : sortedOld[Math.floor(sortedOld.length / 2)])
+      : 0;
 
     return {
       count: data.length,
-      totalWorkers,
-      totalPositions,
-      weightedAvg: weightedAvg.toFixed(1),
-      median: median.toFixed(1),
-      avg: avg.toFixed(1),
-      min: Math.min(...ratios).toFixed(1),
-      max: Math.max(...ratios).toFixed(1),
-      recommendedK: Math.round(weightedAvg / 5) * 5, // Округляем до 5
+      totalWorkersMonthly: Math.round(totalWorkersMonthly),
+      totalPositionsMonthly: Math.round(totalPositionsMonthly * 10) / 10,
+      weightedK: weightedK.toFixed(1),
+      medianK: medianK.toFixed(1),
+      avgK: avgK.toFixed(1),
+      minK: Math.min(...kValues).toFixed(1),
+      maxK: Math.max(...kValues).toFixed(1),
+      recommendedK: Math.round(medianK / 5) * 5 || Math.round(medianK), // Округляем до 5 или до целого
+      // Старые показатели для сравнения
+      medianOld: medianOld.toFixed(1),
     };
   }, [filteredProjectsWithPosition]);
 
@@ -391,7 +427,10 @@ export default function StandardsPage() {
               <Card className="p-4 bg-gradient-to-br from-primary-50 to-cyan-50 border-primary-200">
                 <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-primary-600" />
-                  Расчётный коэффициент для "{selectedPosition}"
+                  Коэффициент K для "{selectedPosition}"
+                  <span className="text-xs font-normal bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                    Помесячные данные
+                  </span>
                   {selectedScale !== 'all' && (
                     <span
                       className="text-sm px-2 py-0.5 rounded-full text-white ml-2"
@@ -408,19 +447,19 @@ export default function StandardsPage() {
                     <div className="text-xs text-slate-600">Проектов</div>
                   </div>
                   <div className="bg-white rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-cyan-600">{positionStats.totalWorkers}</div>
-                    <div className="text-xs text-slate-600">Всего рабочих</div>
+                    <div className="text-2xl font-bold text-cyan-600">{positionStats.totalWorkersMonthly}</div>
+                    <div className="text-xs text-slate-600">Сумма ср.мес. рабочих</div>
                   </div>
                   <div className="bg-white rounded-lg p-3 text-center">
-                    <div className="text-2xl font-bold text-green-600">{positionStats.totalPositions}</div>
-                    <div className="text-xs text-slate-600">Всего должностей</div>
+                    <div className="text-2xl font-bold text-green-600">{positionStats.totalPositionsMonthly}</div>
+                    <div className="text-xs text-slate-600">Сумма ср.мес. должн.</div>
                   </div>
                   <div className="bg-white rounded-lg p-3 text-center border-2 border-amber-400">
-                    <div className="text-2xl font-bold text-amber-600">{positionStats.weightedAvg}</div>
+                    <div className="text-2xl font-bold text-amber-600">{positionStats.weightedK}</div>
                     <div className="text-xs text-slate-600">Средневзвеш. K</div>
                   </div>
                   <div className="bg-white rounded-lg p-3 text-center border-2 border-green-400">
-                    <div className="text-2xl font-bold text-green-600">{positionStats.median}</div>
+                    <div className="text-2xl font-bold text-green-600">{positionStats.medianK}</div>
                     <div className="text-xs text-slate-600">Медиана K</div>
                   </div>
                 </div>
@@ -428,16 +467,20 @@ export default function StandardsPage() {
                 <div className="mt-4 p-3 bg-white rounded-lg">
                   <div className="flex flex-wrap gap-4 text-sm">
                     <div>
-                      <span className="text-slate-500">Мин:</span>{' '}
-                      <span className="font-semibold">{positionStats.min}</span>
+                      <span className="text-slate-500">Мин K:</span>{' '}
+                      <span className="font-semibold">{positionStats.minK}</span>
                     </div>
                     <div>
-                      <span className="text-slate-500">Макс:</span>{' '}
-                      <span className="font-semibold">{positionStats.max}</span>
+                      <span className="text-slate-500">Макс K:</span>{' '}
+                      <span className="font-semibold">{positionStats.maxK}</span>
                     </div>
                     <div>
-                      <span className="text-slate-500">Простое среднее:</span>{' '}
-                      <span className="font-semibold">{positionStats.avg}</span>
+                      <span className="text-slate-500">Ср. K:</span>{' '}
+                      <span className="font-semibold">{positionStats.avgK}</span>
+                    </div>
+                    <div className="text-slate-400">
+                      <span className="text-slate-400">K по уникальным (старый):</span>{' '}
+                      <span className="line-through">{positionStats.medianOld}</span>
                     </div>
                   </div>
                   <div className="mt-3 p-2 bg-primary-100 rounded-lg">
@@ -467,9 +510,9 @@ export default function StandardsPage() {
                     <tr>
                       <th>Проект</th>
                       <th className="text-center">Масштаб</th>
-                      <th className="text-center">Рабочих</th>
-                      <th className="text-center">Должностей</th>
-                      <th className="text-center">K (рабочих/спец.)</th>
+                      <th className="text-center">Ср.мес. рабочих</th>
+                      <th className="text-center">Ср.мес. должн.</th>
+                      <th className="text-center">K (помесячный)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -486,20 +529,20 @@ export default function StandardsPage() {
                             {PROJECT_SCALES.find(s => s.scaleKey === project.project_scale)?.code || '?'}
                           </span>
                         </td>
-                        <td className="text-center">{project.workers_count}</td>
+                        <td className="text-center">{Math.round(project.workers_count_monthly)}</td>
                         <td className="text-center">
                           <span className="inline-flex items-center justify-center px-2 py-0.5 bg-green-100 text-green-700 rounded font-semibold">
-                            {project.position_count}
+                            {project.position_count_monthly.toFixed(1)}
                           </span>
                         </td>
                         <td className="text-center">
-                          {project.ratio !== null ? (
+                          {project.K_monthly !== null ? (
                             <span className={`font-mono font-semibold ${
-                              project.ratio < 20 ? 'text-red-600' :
-                              project.ratio < 40 ? 'text-amber-600' :
+                              project.K_monthly < 15 ? 'text-red-600' :
+                              project.K_monthly < 30 ? 'text-amber-600' :
                               'text-green-600'
                             }`}>
-                              {project.ratio.toFixed(1)}
+                              {project.K_monthly.toFixed(1)}
                             </span>
                           ) : (
                             <span className="text-slate-400">—</span>
@@ -519,7 +562,7 @@ export default function StandardsPage() {
               </div>
 
               <div className="mt-3 text-xs text-slate-500">
-                <strong>K</strong> — количество рабочих на одного специалиста. Чем выше K, тем меньше специалистов нужно.
+                <strong>K</strong> — количество рабочих на одного специалиста (по помесячным данным). Чем выше K, тем меньше специалистов нужно.
               </div>
             </Card>
           </div>
@@ -660,11 +703,11 @@ export default function StandardsPage() {
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Производитель работ</div>
-                  <div className="font-mono">⌈200/70⌉ = <strong>3</strong></div>
+                  <div className="font-mono">⌈200/120⌉ = <strong>2</strong></div>
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Мастер</div>
-                  <div className="font-mono">⌈200/30⌉ = <strong>7</strong></div>
+                  <div className="font-mono">⌈200/20⌉ = <strong>10</strong></div>
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Специалист по ОТ</div>
@@ -672,15 +715,18 @@ export default function StandardsPage() {
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Кладовщик</div>
-                  <div className="font-mono">⌈200/60⌉ = <strong>4</strong></div>
+                  <div className="font-mono">⌈200/80⌉ = <strong>3</strong></div>
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Спец. по общ. вопросам</div>
-                  <div className="font-mono">⌈19/15⌉ = <strong>2</strong></div>
+                  <div className="font-mono">⌈20/15⌉ = <strong>2</strong></div>
                 </div>
               </div>
               <div className="mt-3 p-2 bg-primary-100 rounded-lg text-center">
-                <span className="text-primary-800 font-bold">ИТОГО обязательные: 21 чел ИТР</span>
+                <span className="text-primary-800 font-bold">ИТОГО обязательные: 22 чел ИТР</span>
+              </div>
+              <div className="mt-2 text-xs text-slate-500 text-center">
+                Коэффициенты для масштаба L: K_прораб=120, K_мастер=20, K_склад=80
               </div>
             </Card>
           </div>
