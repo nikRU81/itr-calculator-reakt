@@ -35,7 +35,7 @@ const COLORS = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b'];
 // Данные: январь-октябрь 2025
 const PROJECT_SCALES = [
   { code: 'S', name: 'Малый', workers: 'до 50', color: '#f59e0b', K_prorab: 22, K_master: 14, K_sklad: 32, scaleKey: 'Small' },
-  { code: 'M', name: 'Средний', workers: '50–150', color: '#10b981', K_prorab: 78, K_master: 24, K_sklad: 72, scaleKey: 'Medium' },
+  { code: 'M', name: 'Средний', workers: '50–150', color: '#10b981', K_prorab: 78, K_master: 24, K_sklad: 73, scaleKey: 'Medium' },
   { code: 'L', name: 'Крупный', workers: '150–300', color: '#06b6d4', K_prorab: 169, K_master: 19, K_sklad: 81, scaleKey: 'Large' },
   { code: 'XL', name: 'Очень крупный', workers: '300+', color: '#4f46e5', K_prorab: 90, K_master: 24, K_sklad: 494, scaleKey: 'Very Large' },
 ];
@@ -318,7 +318,7 @@ export default function StandardsPage() {
       avgK: avgK.toFixed(1),
       minK: Math.min(...kValues).toFixed(1),
       maxK: Math.max(...kValues).toFixed(1),
-      recommendedK: Math.round(medianK / 5) * 5 || Math.round(medianK), // Округляем до 5 или до целого
+      recommendedK: Math.round(medianK), // Округляем медиану до целого
       // Старые показатели для сравнения
       medianOld: medianOld.toFixed(1),
     };

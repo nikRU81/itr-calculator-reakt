@@ -114,7 +114,7 @@
         "K_avg": 91.7,
         "K_min": 30.5,
         "K_max": 189.0,
-        "recommended_K": 72
+        "recommended_K": 73
       },
       "Large": {
         "projects_count": 4,
@@ -269,7 +269,7 @@
         "K_avg": 32.9,
         "K_min": 26.0,
         "K_max": 36.5,
-        "recommended_K": 30
+        "recommended_K": 31
       },
       "Medium": {
         "projects_count": 12,
@@ -296,7 +296,7 @@
         "K_avg": 316.7,
         "K_min": 248.5,
         "K_max": 248.5,
-        "recommended_K": 248
+        "recommended_K": 249
       }
     }
   },
