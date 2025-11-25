@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
   Users,
   Briefcase,
@@ -11,6 +11,9 @@ import {
   HelpCircle,
   XCircle,
   Calculator,
+  Database,
+  Filter,
+  BarChart3,
 } from 'lucide-react';
 import Card from '../../components/ui/Card';
 import MetricCard from '../../components/ui/MetricCard';
@@ -26,11 +29,12 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsive
 const COLORS = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b'];
 
 // Определение масштабов проекта
+// Коэффициенты рассчитаны на основе анализа 74 реальных проектов
 const PROJECT_SCALES = [
-  { code: 'S', name: 'Малый', workers: 'до 50', color: '#f59e0b', K_prorab: 15, K_master: 10, K_sklad: 30 },
-  { code: 'M', name: 'Средний', workers: '50–150', color: '#10b981', K_prorab: 20, K_master: 12, K_sklad: 40 },
-  { code: 'L', name: 'Крупный', workers: '150–300', color: '#06b6d4', K_prorab: 25, K_master: 15, K_sklad: 50 },
-  { code: 'XL', name: 'Очень крупный', workers: '300+', color: '#4f46e5', K_prorab: 30, K_master: 18, K_sklad: 60 },
+  { code: 'S', name: 'Малый', workers: 'до 50', color: '#f59e0b', K_prorab: 30, K_master: 20, K_sklad: 40, scaleKey: 'Small' },
+  { code: 'M', name: 'Средний', workers: '50–150', color: '#10b981', K_prorab: 50, K_master: 25, K_sklad: 50, scaleKey: 'Medium' },
+  { code: 'L', name: 'Крупный', workers: '150–300', color: '#06b6d4', K_prorab: 70, K_master: 30, K_sklad: 60, scaleKey: 'Large' },
+  { code: 'XL', name: 'Очень крупный', workers: '300+', color: '#4f46e5', K_prorab: 100, K_master: 35, K_sklad: 80, scaleKey: 'Very Large' },
 ];
 
 // Классификация должностей
@@ -55,12 +59,44 @@ const POSITION_CLASSIFICATION = {
   ],
 };
 
+// Интерфейсы для данных
+interface PositionDistributionRecord {
+  project: string;
+  position_group: string;
+  count: number;
+}
+
+interface ProjectAnalysisRecord {
+  project: string;
+  itr_count: number;
+  workers_count: number;
+  project_scale: string;
+  itr_per_100_workers: number | null;
+}
+
+// Объединённые данные проекта
+interface ProjectWithPosition {
+  project: string;
+  workers_count: number;
+  position_count: number;
+  project_scale: string;
+  ratio: number | null; // рабочих на 1 специалиста
+}
+
 export default function StandardsPage() {
   const [companyStandards, setCompanyStandards] = useState<CompanyStandards | null>(null);
   const [positionNorms, setPositionNorms] = useState<PositionGroupNorm[]>([]);
   const [scaleStandards, setScaleStandards] = useState<ScaleBasedStandards | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  // Данные для анализа
+  const [positionDistribution, setPositionDistribution] = useState<PositionDistributionRecord[]>([]);
+  const [projectsAnalysis, setProjectsAnalysis] = useState<ProjectAnalysisRecord[]>([]);
+
+  // Фильтры для анализа
+  const [selectedPosition, setSelectedPosition] = useState<string>('Мастер');
+  const [selectedScale, setSelectedScale] = useState<string>('all');
 
   // Демо калькулятор
   const [demoWorkers, setDemoWorkers] = useState(100);
@@ -70,14 +106,18 @@ export default function StandardsPage() {
     async function loadData() {
       setLoading(true);
       try {
-        const [standards, norms, scaleData] = await Promise.all([
+        const [standards, norms, scaleData, posDistResp, projAnalResp] = await Promise.all([
           loadCompanyStandards(),
           loadPositionNorms(),
           loadScaleBasedStandards(),
+          fetch('/data/position_distribution.json').then(r => r.json()),
+          fetch('/data/projects_analysis.json').then(r => r.json()),
         ]);
         setCompanyStandards(standards);
         setPositionNorms(norms);
         setScaleStandards(scaleData);
+        setPositionDistribution(posDistResp);
+        setProjectsAnalysis(projAnalResp);
       } catch (err) {
         setError('Ошибка загрузки данных');
         console.error(err);
@@ -87,6 +127,80 @@ export default function StandardsPage() {
     }
     loadData();
   }, []);
+
+  // Список уникальных должностей
+  const uniquePositions = useMemo(() => {
+    const positions = new Set(positionDistribution.map(p => p.position_group));
+    return Array.from(positions).sort();
+  }, [positionDistribution]);
+
+  // Объединённые данные для выбранной должности и масштаба
+  const filteredProjectsWithPosition = useMemo(() => {
+    if (!selectedPosition) return [];
+
+    // Получаем проекты с выбранной должностью
+    const positionProjects = positionDistribution.filter(
+      p => p.position_group === selectedPosition
+    );
+
+    // Объединяем с данными по проектам
+    const result: ProjectWithPosition[] = [];
+
+    for (const pp of positionProjects) {
+      const projectData = projectsAnalysis.find(pa => pa.project === pp.project);
+      if (projectData && projectData.workers_count > 0) {
+        // Фильтруем по масштабу
+        if (selectedScale !== 'all' && projectData.project_scale !== selectedScale) {
+          continue;
+        }
+
+        result.push({
+          project: pp.project,
+          workers_count: projectData.workers_count,
+          position_count: pp.count,
+          project_scale: projectData.project_scale,
+          ratio: pp.count > 0 ? projectData.workers_count / pp.count : null,
+        });
+      }
+    }
+
+    // Сортируем по численности рабочих
+    return result.sort((a, b) => a.workers_count - b.workers_count);
+  }, [selectedPosition, selectedScale, positionDistribution, projectsAnalysis]);
+
+  // Статистика по выбранной должности
+  const positionStats = useMemo(() => {
+    const data = filteredProjectsWithPosition.filter(p => p.ratio !== null && p.ratio > 0);
+    if (data.length === 0) return null;
+
+    const ratios = data.map(p => p.ratio as number);
+    const totalWorkers = data.reduce((sum, p) => sum + p.workers_count, 0);
+    const totalPositions = data.reduce((sum, p) => sum + p.position_count, 0);
+
+    // Средневзвешенное
+    const weightedAvg = totalWorkers / totalPositions;
+
+    // Медиана
+    const sorted = [...ratios].sort((a, b) => a - b);
+    const median = sorted.length % 2 === 0
+      ? (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2
+      : sorted[Math.floor(sorted.length / 2)];
+
+    // Простое среднее
+    const avg = ratios.reduce((sum, r) => sum + r, 0) / ratios.length;
+
+    return {
+      count: data.length,
+      totalWorkers,
+      totalPositions,
+      weightedAvg: weightedAvg.toFixed(1),
+      median: median.toFixed(1),
+      avg: avg.toFixed(1),
+      min: Math.min(...ratios).toFixed(1),
+      max: Math.max(...ratios).toFixed(1),
+      recommendedK: Math.round(weightedAvg / 5) * 5, // Округляем до 5
+    };
+  }, [filteredProjectsWithPosition]);
 
   // Автоопределение масштаба по численности
   useEffect(() => {
@@ -151,6 +265,12 @@ export default function StandardsPage() {
     'ИТР/100': Number(data.avg_itr_per_100_workers.toFixed(2)),
   }));
 
+  // Получить цвет масштаба
+  const getScaleColor = (scaleKey: string) => {
+    const scale = PROJECT_SCALES.find(s => s.scaleKey === scaleKey);
+    return scale?.color || '#94a3b8';
+  };
+
   return (
     <div className="space-y-4">
       {/* Key Metrics */}
@@ -182,8 +302,11 @@ export default function StandardsPage() {
       </div>
 
       {/* Tabs */}
-      <Tabs defaultTab="methodology">
+      <Tabs defaultTab="analysis">
         <TabsList>
+          <Tab value="analysis" icon={<Database className="w-4 h-4" />}>
+            Анализ данных
+          </Tab>
           <Tab value="methodology" icon={<BookOpen className="w-4 h-4" />}>
             Методика
           </Tab>
@@ -197,6 +320,210 @@ export default function StandardsPage() {
             Статистика
           </Tab>
         </TabsList>
+
+        {/* NEW: Data Analysis Tab */}
+        <TabsContent value="analysis">
+          <div className="space-y-4">
+            {/* Фильтры */}
+            <Card className="p-4">
+              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <Filter className="w-5 h-5 text-primary-600" />
+                Анализ нормативов по реальным данным
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {/* Выбор должности */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Группа должностей
+                  </label>
+                  <select
+                    value={selectedPosition}
+                    onChange={(e) => setSelectedPosition(e.target.value)}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    {uniquePositions.map((pos) => (
+                      <option key={pos} value={pos}>{pos}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Выбор масштаба */}
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">
+                    Масштаб проекта
+                  </label>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setSelectedScale('all')}
+                      className={`px-3 py-2 rounded-lg border-2 transition-all ${
+                        selectedScale === 'all'
+                          ? 'border-primary-500 bg-primary-50 text-primary-700'
+                          : 'border-slate-200 hover:border-slate-300'
+                      }`}
+                    >
+                      Все
+                    </button>
+                    {PROJECT_SCALES.map((scale) => (
+                      <button
+                        key={scale.code}
+                        onClick={() => setSelectedScale(scale.scaleKey)}
+                        className={`px-3 py-2 rounded-lg border-2 transition-all ${
+                          selectedScale === scale.scaleKey
+                            ? 'border-primary-500 bg-primary-50'
+                            : 'border-slate-200 hover:border-slate-300'
+                        }`}
+                        style={{
+                          borderColor: selectedScale === scale.scaleKey ? scale.color : undefined,
+                          color: selectedScale === scale.scaleKey ? scale.color : undefined,
+                        }}
+                      >
+                        {scale.code}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </Card>
+
+            {/* Статистика */}
+            {positionStats && (
+              <Card className="p-4 bg-gradient-to-br from-primary-50 to-cyan-50 border-primary-200">
+                <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-primary-600" />
+                  Расчётный коэффициент для "{selectedPosition}"
+                  {selectedScale !== 'all' && (
+                    <span
+                      className="text-sm px-2 py-0.5 rounded-full text-white ml-2"
+                      style={{ backgroundColor: getScaleColor(selectedScale) }}
+                    >
+                      {PROJECT_SCALES.find(s => s.scaleKey === selectedScale)?.name}
+                    </span>
+                  )}
+                </h3>
+
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                  <div className="bg-white rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-primary-600">{positionStats.count}</div>
+                    <div className="text-xs text-slate-600">Проектов</div>
+                  </div>
+                  <div className="bg-white rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-cyan-600">{positionStats.totalWorkers}</div>
+                    <div className="text-xs text-slate-600">Всего рабочих</div>
+                  </div>
+                  <div className="bg-white rounded-lg p-3 text-center">
+                    <div className="text-2xl font-bold text-green-600">{positionStats.totalPositions}</div>
+                    <div className="text-xs text-slate-600">Всего должностей</div>
+                  </div>
+                  <div className="bg-white rounded-lg p-3 text-center border-2 border-amber-400">
+                    <div className="text-2xl font-bold text-amber-600">{positionStats.weightedAvg}</div>
+                    <div className="text-xs text-slate-600">Средневзвеш. K</div>
+                  </div>
+                  <div className="bg-white rounded-lg p-3 text-center border-2 border-green-400">
+                    <div className="text-2xl font-bold text-green-600">{positionStats.median}</div>
+                    <div className="text-xs text-slate-600">Медиана K</div>
+                  </div>
+                </div>
+
+                <div className="mt-4 p-3 bg-white rounded-lg">
+                  <div className="flex flex-wrap gap-4 text-sm">
+                    <div>
+                      <span className="text-slate-500">Мин:</span>{' '}
+                      <span className="font-semibold">{positionStats.min}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500">Макс:</span>{' '}
+                      <span className="font-semibold">{positionStats.max}</span>
+                    </div>
+                    <div>
+                      <span className="text-slate-500">Простое среднее:</span>{' '}
+                      <span className="font-semibold">{positionStats.avg}</span>
+                    </div>
+                  </div>
+                  <div className="mt-3 p-2 bg-primary-100 rounded-lg">
+                    <span className="text-primary-800 font-semibold">
+                      Рекомендуемый K = {positionStats.recommendedK}
+                    </span>
+                    <span className="text-primary-600 text-sm ml-2">
+                      (1 специалист на {positionStats.recommendedK} рабочих)
+                    </span>
+                  </div>
+                </div>
+              </Card>
+            )}
+
+            {/* Таблица проектов */}
+            <Card className="p-4">
+              <h3 className="text-lg font-bold text-slate-900 mb-4">
+                Проекты с должностью "{selectedPosition}"
+                <span className="text-sm font-normal text-slate-500 ml-2">
+                  ({filteredProjectsWithPosition.length} проектов)
+                </span>
+              </h3>
+
+              <div className="overflow-x-auto max-h-[400px] overflow-y-auto">
+                <table className="table text-sm">
+                  <thead className="sticky top-0 bg-white">
+                    <tr>
+                      <th>Проект</th>
+                      <th className="text-center">Масштаб</th>
+                      <th className="text-center">Рабочих</th>
+                      <th className="text-center">Должностей</th>
+                      <th className="text-center">K (рабочих/спец.)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filteredProjectsWithPosition.map((project, index) => (
+                      <tr key={index}>
+                        <td className="font-medium text-slate-900 max-w-[250px] truncate" title={project.project}>
+                          {project.project}
+                        </td>
+                        <td className="text-center">
+                          <span
+                            className="inline-flex px-2 py-0.5 rounded-full text-xs font-semibold text-white"
+                            style={{ backgroundColor: getScaleColor(project.project_scale) }}
+                          >
+                            {PROJECT_SCALES.find(s => s.scaleKey === project.project_scale)?.code || '?'}
+                          </span>
+                        </td>
+                        <td className="text-center">{project.workers_count}</td>
+                        <td className="text-center">
+                          <span className="inline-flex items-center justify-center px-2 py-0.5 bg-green-100 text-green-700 rounded font-semibold">
+                            {project.position_count}
+                          </span>
+                        </td>
+                        <td className="text-center">
+                          {project.ratio !== null ? (
+                            <span className={`font-mono font-semibold ${
+                              project.ratio < 20 ? 'text-red-600' :
+                              project.ratio < 40 ? 'text-amber-600' :
+                              'text-green-600'
+                            }`}>
+                              {project.ratio.toFixed(1)}
+                            </span>
+                          ) : (
+                            <span className="text-slate-400">—</span>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                    {filteredProjectsWithPosition.length === 0 && (
+                      <tr>
+                        <td colSpan={5} className="text-center text-slate-500 py-8">
+                          Нет проектов с выбранной должностью для данного масштаба
+                        </td>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-3 text-xs text-slate-500">
+                <strong>K</strong> — количество рабочих на одного специалиста. Чем выше K, тем меньше специалистов нужно.
+              </div>
+            </Card>
+          </div>
+        </TabsContent>
 
         {/* Methodology Tab */}
         <TabsContent value="methodology">
@@ -319,7 +646,7 @@ export default function StandardsPage() {
                 </table>
               </div>
               <p className="text-xs text-slate-500 mt-2">
-                K — количество рабочих на одного специалиста. Например, K_мастер=15 означает 1 мастер на 15 рабочих.
+                K — количество рабочих на одного специалиста. Например, K_мастер=25 означает 1 мастер на 25 рабочих.
               </p>
             </Card>
 
@@ -333,11 +660,11 @@ export default function StandardsPage() {
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Производитель работ</div>
-                  <div className="font-mono">⌈200/25⌉ = <strong>8</strong></div>
+                  <div className="font-mono">⌈200/70⌉ = <strong>3</strong></div>
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Мастер</div>
-                  <div className="font-mono">⌈200/15⌉ = <strong>14</strong></div>
+                  <div className="font-mono">⌈200/30⌉ = <strong>7</strong></div>
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Специалист по ОТ</div>
@@ -345,15 +672,15 @@ export default function StandardsPage() {
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Кладовщик</div>
-                  <div className="font-mono">⌈200/50⌉ = <strong>4</strong></div>
+                  <div className="font-mono">⌈200/60⌉ = <strong>4</strong></div>
                 </div>
                 <div className="bg-white rounded p-2">
                   <div className="text-slate-500 text-xs">Спец. по общ. вопросам</div>
-                  <div className="font-mono">⌈31/15⌉ = <strong>3</strong></div>
+                  <div className="font-mono">⌈19/15⌉ = <strong>2</strong></div>
                 </div>
               </div>
               <div className="mt-3 p-2 bg-primary-100 rounded-lg text-center">
-                <span className="text-primary-800 font-bold">ИТОГО обязательные: 34 чел ИТР</span>
+                <span className="text-primary-800 font-bold">ИТОГО обязательные: 21 чел ИТР</span>
               </div>
             </Card>
           </div>

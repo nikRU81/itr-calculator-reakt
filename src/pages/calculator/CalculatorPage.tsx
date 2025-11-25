@@ -8,11 +8,15 @@ import { useStore } from '../../store/useStore';
 import { loadCalculatorConfig } from '../../utils/calculator';
 
 // Определение масштабов проекта
+// Коэффициенты рассчитаны на основе анализа 74 реальных проектов:
+// - K_prorab: 1 прораб на K рабочих (реальное соотношение 50-100)
+// - K_master: 1 мастер на K рабочих (реальное соотношение 25-40)
+// - K_sklad: 1 кладовщик на K рабочих
 const PROJECT_SCALES = [
-  { code: 'S', name: 'Малый', minWorkers: 0, maxWorkers: 50, color: '#f59e0b', K_prorab: 15, K_master: 10, K_sklad: 30 },
-  { code: 'M', name: 'Средний', minWorkers: 50, maxWorkers: 150, color: '#10b981', K_prorab: 20, K_master: 12, K_sklad: 40 },
-  { code: 'L', name: 'Крупный', minWorkers: 150, maxWorkers: 300, color: '#06b6d4', K_prorab: 25, K_master: 15, K_sklad: 50 },
-  { code: 'XL', name: 'Очень крупный', minWorkers: 300, maxWorkers: Infinity, color: '#4f46e5', K_prorab: 30, K_master: 18, K_sklad: 60 },
+  { code: 'S', name: 'Малый', minWorkers: 0, maxWorkers: 50, color: '#f59e0b', K_prorab: 30, K_master: 20, K_sklad: 40 },
+  { code: 'M', name: 'Средний', minWorkers: 50, maxWorkers: 150, color: '#10b981', K_prorab: 50, K_master: 25, K_sklad: 50 },
+  { code: 'L', name: 'Крупный', minWorkers: 150, maxWorkers: 300, color: '#06b6d4', K_prorab: 70, K_master: 30, K_sklad: 60 },
+  { code: 'XL', name: 'Очень крупный', minWorkers: 300, maxWorkers: Infinity, color: '#4f46e5', K_prorab: 100, K_master: 35, K_sklad: 80 },
 ];
 
 // Условные факторы
