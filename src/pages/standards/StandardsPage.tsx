@@ -60,6 +60,22 @@ const POSITION_CLASSIFICATION = {
   ],
 };
 
+// Интерфейс для сводных нормативов по масштабам
+interface PositionNormsByScale {
+  position_group: string;
+  scales: {
+    [key: string]: {
+      projects_count: number;
+      K_median: number;
+      K_weighted: number;
+      K_avg: number;
+      K_min: number;
+      K_max: number;
+      recommended_K: number;
+    };
+  };
+}
+
 // Интерфейсы для данных (с помесячной статистикой)
 interface PositionDistributionRecord {
   project: string;
@@ -108,6 +124,7 @@ export default function StandardsPage() {
   // Данные для анализа
   const [positionDistribution, setPositionDistribution] = useState<PositionDistributionRecord[]>([]);
   const [projectsAnalysis, setProjectsAnalysis] = useState<ProjectAnalysisRecord[]>([]);
+  const [positionNormsByScale, setPositionNormsByScale] = useState<PositionNormsByScale[]>([]);
 
   // Фильтры для анализа
   const [selectedPosition, setSelectedPosition] = useState<string>('Мастер');
@@ -121,18 +138,20 @@ export default function StandardsPage() {
     async function loadData() {
       setLoading(true);
       try {
-        const [standards, norms, scaleData, posDistResp, projAnalResp] = await Promise.all([
+        const [standards, norms, scaleData, posDistResp, projAnalResp, posNormsResp] = await Promise.all([
           loadCompanyStandards(),
           loadPositionNorms(),
           loadScaleBasedStandards(),
           fetch('/data/position_distribution.json').then(r => r.json()),
           fetch('/data/projects_analysis.json').then(r => r.json()),
+          fetch('/data/position_norms_by_scale.json').then(r => r.json()),
         ]);
         setCompanyStandards(standards);
         setPositionNorms(norms);
         setScaleStandards(scaleData);
         setPositionDistribution(posDistResp);
         setProjectsAnalysis(projAnalResp);
+        setPositionNormsByScale(posNormsResp);
       } catch (err) {
         setError('Ошибка загрузки данных');
         console.error(err);
@@ -651,46 +670,74 @@ export default function StandardsPage() {
             {/* Масштабы проектов */}
             <Card className="p-4">
               <h3 className="text-lg font-bold text-slate-900 mb-4">Определение масштаба проекта</h3>
+              <div className="grid grid-cols-4 gap-3 mb-4">
+                {PROJECT_SCALES.map((scale) => (
+                  <div
+                    key={scale.code}
+                    className="p-3 rounded-lg border-2 text-center"
+                    style={{ borderColor: scale.color, backgroundColor: `${scale.color}10` }}
+                  >
+                    <div className="font-bold text-2xl" style={{ color: scale.color }}>{scale.code}</div>
+                    <div className="font-semibold text-slate-900">{scale.name}</div>
+                    <div className="text-sm text-slate-600">{scale.workers} рабочих</div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* ПОЛНАЯ ТАБЛИЦА K КОЭФФИЦИЕНТОВ ДЛЯ ВСЕХ ДОЛЖНОСТЕЙ */}
+            <Card className="p-4">
+              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <Table className="w-5 h-5 text-primary-600" />
+                K коэффициенты для всех должностей
+                <span className="text-xs font-normal bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                  Помесячные данные
+                </span>
+              </h3>
+              <p className="text-sm text-slate-600 mb-4">
+                K — количество рабочих на одного специалиста. Формула: <code className="bg-slate-100 px-1 rounded">ceil(Рабочие / K)</code>
+              </p>
               <div className="overflow-x-auto">
                 <table className="table text-sm">
                   <thead>
                     <tr>
-                      <th>Масштаб</th>
-                      <th>Код</th>
-                      <th>Численность рабочих</th>
-                      <th>K_прораб</th>
-                      <th>K_мастер</th>
-                      <th>K_склад</th>
+                      <th>Должность</th>
+                      <th className="text-center" style={{ color: '#f59e0b' }}>S</th>
+                      <th className="text-center" style={{ color: '#10b981' }}>M</th>
+                      <th className="text-center" style={{ color: '#06b6d4' }}>L</th>
+                      <th className="text-center" style={{ color: '#4f46e5' }}>XL</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {PROJECT_SCALES.map((scale) => (
-                      <tr key={scale.code}>
-                        <td>
-                          <span
-                            className="inline-flex items-center gap-1 font-semibold"
-                            style={{ color: scale.color }}
-                          >
-                            <span
-                              className="w-3 h-3 rounded-full"
-                              style={{ backgroundColor: scale.color }}
-                            />
-                            {scale.name}
-                          </span>
+                    {positionNormsByScale.map((norm) => (
+                      <tr key={norm.position_group}>
+                        <td className="font-medium text-slate-900 max-w-[200px]">
+                          {norm.position_group}
                         </td>
-                        <td className="font-mono font-bold">{scale.code}</td>
-                        <td className="font-semibold">{scale.workers}</td>
-                        <td className="text-center">{scale.K_prorab}</td>
-                        <td className="text-center">{scale.K_master}</td>
-                        <td className="text-center">{scale.K_sklad}</td>
+                        {['Small', 'Medium', 'Large', 'Very Large'].map((scale) => {
+                          const scaleData = norm.scales[scale];
+                          return (
+                            <td key={scale} className="text-center">
+                              {scaleData ? (
+                                <div>
+                                  <span className="font-bold text-lg">{scaleData.recommended_K}</span>
+                                  <div className="text-xs text-slate-400">({scaleData.projects_count})</div>
+                                </div>
+                              ) : (
+                                <span className="text-slate-300">—</span>
+                              )}
+                            </td>
+                          );
+                        })}
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              <p className="text-xs text-slate-500 mt-2">
-                K — количество рабочих на одного специалиста. Например, K_мастер=25 означает 1 мастер на 25 рабочих.
-              </p>
+              <div className="mt-3 flex flex-wrap gap-4 text-xs text-slate-500">
+                <span>Значения K рассчитаны на основе медианы помесячных данных</span>
+                <span>В скобках — количество проектов с данными</span>
+              </div>
             </Card>
 
             {/* Пример расчёта */}

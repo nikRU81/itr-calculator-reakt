@@ -1,0 +1,408 @@
+[
+  {
+    "position_group": "Водитель / Машинист / Механик",
+    "scales": {
+      "Small": {
+        "projects_count": 11,
+        "K_median": 15.0,
+        "K_weighted": 27.9,
+        "K_avg": 24.5,
+        "K_min": 5.0,
+        "K_max": 41.0,
+        "recommended_K": 15
+      },
+      "Medium": {
+        "projects_count": 9,
+        "K_median": 53.0,
+        "K_weighted": 57.3,
+        "K_avg": 58.6,
+        "K_min": 8.3,
+        "K_max": 118.0,
+        "recommended_K": 53
+      },
+      "Large": {
+        "projects_count": 3,
+        "K_median": 41.1,
+        "K_weighted": 45.5,
+        "K_avg": 69.8,
+        "K_min": 12.3,
+        "K_max": 97.0,
+        "recommended_K": 41
+      },
+      "Very Large": {
+        "projects_count": 1,
+        "K_median": 204.8,
+        "K_weighted": 204.8,
+        "K_avg": 227.4,
+        "K_min": 204.8,
+        "K_max": 204.8,
+        "recommended_K": 205
+      }
+    }
+  },
+  {
+    "position_group": "Инженер-конструктор / Техник-конструктор",
+    "scales": {
+      "Medium": {
+        "projects_count": 3,
+        "K_median": 66.0,
+        "K_weighted": 93.6,
+        "K_avg": 103.8,
+        "K_min": 44.0,
+        "K_max": 189.0,
+        "recommended_K": 66
+      },
+      "Large": {
+        "projects_count": 1,
+        "K_median": 89.0,
+        "K_weighted": 89.0,
+        "K_avg": 148.4,
+        "K_min": 89.0,
+        "K_max": 89.0,
+        "recommended_K": 89
+      }
+    }
+  },
+  {
+    "position_group": "Инспектор строительных лесов",
+    "scales": {
+      "Small": {
+        "projects_count": 2,
+        "K_median": 15.2,
+        "K_weighted": 23.1,
+        "K_avg": 17.4,
+        "K_min": 4.5,
+        "K_max": 26.0,
+        "recommended_K": 15
+      },
+      "Medium": {
+        "projects_count": 4,
+        "K_median": 96.7,
+        "K_weighted": 80.8,
+        "K_avg": 81.1,
+        "K_min": 31.0,
+        "K_max": 103.0,
+        "recommended_K": 97
+      },
+      "Large": {
+        "projects_count": 1,
+        "K_median": 49.2,
+        "K_weighted": 49.2,
+        "K_avg": 49.2,
+        "K_min": 49.2,
+        "K_max": 49.2,
+        "recommended_K": 49
+      }
+    }
+  },
+  {
+    "position_group": "Кладовщик / Работник склада / Специалист ОМТС",
+    "scales": {
+      "Small": {
+        "projects_count": 9,
+        "K_median": 32.0,
+        "K_weighted": 36.5,
+        "K_avg": 30.6,
+        "K_min": 9.0,
+        "K_max": 49.0,
+        "recommended_K": 32
+      },
+      "Medium": {
+        "projects_count": 12,
+        "K_median": 72.5,
+        "K_weighted": 85.7,
+        "K_avg": 91.7,
+        "K_min": 30.5,
+        "K_max": 189.0,
+        "recommended_K": 72
+      },
+      "Large": {
+        "projects_count": 4,
+        "K_median": 81.2,
+        "K_weighted": 82.2,
+        "K_avg": 90.3,
+        "K_min": 48.5,
+        "K_max": 103.0,
+        "recommended_K": 81
+      },
+      "Very Large": {
+        "projects_count": 1,
+        "K_median": 493.5,
+        "K_weighted": 493.5,
+        "K_avg": 479.4,
+        "K_min": 493.5,
+        "K_max": 493.5,
+        "recommended_K": 494
+      }
+    }
+  },
+  {
+    "position_group": "Мастер",
+    "scales": {
+      "Small": {
+        "projects_count": 46,
+        "K_median": 14.2,
+        "K_weighted": 20.7,
+        "K_avg": 16.6,
+        "K_min": 2.0,
+        "K_max": 55.0,
+        "recommended_K": 14
+      },
+      "Medium": {
+        "projects_count": 16,
+        "K_median": 23.8,
+        "K_weighted": 24.6,
+        "K_avg": 25.1,
+        "K_min": 15.1,
+        "K_max": 46.8,
+        "recommended_K": 24
+      },
+      "Large": {
+        "projects_count": 4,
+        "K_median": 19.2,
+        "K_weighted": 23.9,
+        "K_avg": 26.8,
+        "K_min": 14.7,
+        "K_max": 50.8,
+        "recommended_K": 19
+      },
+      "Very Large": {
+        "projects_count": 1,
+        "K_median": 24.2,
+        "K_weighted": 24.2,
+        "K_avg": 24.8,
+        "K_min": 24.2,
+        "K_max": 24.2,
+        "recommended_K": 24
+      }
+    }
+  },
+  {
+    "position_group": "Производитель работ",
+    "scales": {
+      "Small": {
+        "projects_count": 32,
+        "K_median": 22.0,
+        "K_weighted": 29.6,
+        "K_avg": 23.2,
+        "K_min": 2.0,
+        "K_max": 63.0,
+        "recommended_K": 22
+      },
+      "Medium": {
+        "projects_count": 15,
+        "K_median": 77.5,
+        "K_weighted": 84.4,
+        "K_avg": 84.6,
+        "K_min": 36.0,
+        "K_max": 143.0,
+        "recommended_K": 78
+      },
+      "Large": {
+        "projects_count": 4,
+        "K_median": 169.1,
+        "K_weighted": 155.1,
+        "K_avg": 149.4,
+        "K_min": 55.7,
+        "K_max": 206.0,
+        "recommended_K": 169
+      },
+      "Very Large": {
+        "projects_count": 1,
+        "K_median": 90.2,
+        "K_weighted": 90.2,
+        "K_avg": 97.6,
+        "K_min": 90.2,
+        "K_max": 90.2,
+        "recommended_K": 90
+      }
+    }
+  },
+  {
+    "position_group": "Руководитель проекта",
+    "scales": {
+      "Small": {
+        "projects_count": 14,
+        "K_median": 25.2,
+        "K_weighted": 33.7,
+        "K_avg": 25.0,
+        "K_min": 4.0,
+        "K_max": 61.0,
+        "recommended_K": 25
+      },
+      "Medium": {
+        "projects_count": 10,
+        "K_median": 109.2,
+        "K_weighted": 115.6,
+        "K_avg": 105.8,
+        "K_min": 62.5,
+        "K_max": 168.0,
+        "recommended_K": 109
+      },
+      "Large": {
+        "projects_count": 4,
+        "K_median": 201.5,
+        "K_weighted": 209.1,
+        "K_avg": 197.0,
+        "K_min": 81.0,
+        "K_max": 290.5,
+        "recommended_K": 202
+      },
+      "Very Large": {
+        "projects_count": 1,
+        "K_median": 491.0,
+        "K_weighted": 491.0,
+        "K_avg": 415.9,
+        "K_min": 491.0,
+        "K_max": 491.0,
+        "recommended_K": 491
+      }
+    }
+  },
+  {
+    "position_group": "Сотрудник службы безопасности",
+    "scales": {
+      "Small": {
+        "projects_count": 5,
+        "K_median": 30.5,
+        "K_weighted": 31.5,
+        "K_avg": 32.9,
+        "K_min": 26.0,
+        "K_max": 36.5,
+        "recommended_K": 30
+      },
+      "Medium": {
+        "projects_count": 12,
+        "K_median": 106.0,
+        "K_weighted": 109.7,
+        "K_avg": 106.0,
+        "K_min": 49.0,
+        "K_max": 189.0,
+        "recommended_K": 106
+      },
+      "Large": {
+        "projects_count": 4,
+        "K_median": 201.5,
+        "K_weighted": 218.1,
+        "K_avg": 213.2,
+        "K_min": 89.0,
+        "K_max": 313.0,
+        "recommended_K": 202
+      },
+      "Very Large": {
+        "projects_count": 1,
+        "K_median": 248.5,
+        "K_weighted": 248.5,
+        "K_avg": 316.7,
+        "K_min": 248.5,
+        "K_max": 248.5,
+        "recommended_K": 248
+      }
+    }
+  },
+  {
+    "position_group": "Специалист по общим вопросам / Административный работник",
+    "scales": {
+      "Small": {
+        "projects_count": 18,
+        "K_median": 18.8,
+        "K_weighted": 29.1,
+        "K_avg": 21.5,
+        "K_min": 4.0,
+        "K_max": 55.5,
+        "recommended_K": 19
+      },
+      "Medium": {
+        "projects_count": 15,
+        "K_median": 46.8,
+        "K_weighted": 50.0,
+        "K_avg": 53.4,
+        "K_min": 27.0,
+        "K_max": 87.0,
+        "recommended_K": 47
+      },
+      "Large": {
+        "projects_count": 4,
+        "K_median": 58.6,
+        "K_weighted": 61.4,
+        "K_avg": 61.9,
+        "K_min": 40.5,
+        "K_max": 77.3,
+        "recommended_K": 59
+      },
+      "Very Large": {
+        "projects_count": 1,
+        "K_median": 98.7,
+        "K_weighted": 98.7,
+        "K_avg": 89.5,
+        "K_min": 98.7,
+        "K_max": 98.7,
+        "recommended_K": 99
+      }
+    }
+  },
+  {
+    "position_group": "Специалист по охране труда",
+    "scales": {
+      "Small": {
+        "projects_count": 16,
+        "K_median": 29.2,
+        "K_weighted": 36.9,
+        "K_avg": 31.2,
+        "K_min": 7.5,
+        "K_max": 97.0,
+        "recommended_K": 29
+      },
+      "Medium": {
+        "projects_count": 15,
+        "K_median": 49.5,
+        "K_weighted": 53.1,
+        "K_avg": 54.7,
+        "K_min": 20.0,
+        "K_max": 99.0,
+        "recommended_K": 50
+      },
+      "Large": {
+        "projects_count": 4,
+        "K_median": 56.4,
+        "K_weighted": 66.4,
+        "K_avg": 70.7,
+        "K_min": 34.3,
+        "K_max": 104.3,
+        "recommended_K": 56
+      },
+      "Very Large": {
+        "projects_count": 1,
+        "K_median": 48.1,
+        "K_weighted": 48.1,
+        "K_avg": 50.5,
+        "K_min": 48.1,
+        "K_max": 48.1,
+        "recommended_K": 48
+      }
+    }
+  },
+  {
+    "position_group": "Специалист по сопровождению групп",
+    "scales": {
+      "Medium": {
+        "projects_count": 1,
+        "K_median": 157.0,
+        "K_weighted": 157.0,
+        "K_avg": 138.9,
+        "K_min": 157.0,
+        "K_max": 157.0,
+        "recommended_K": 157
+      },
+      "Very Large": {
+        "projects_count": 1,
+        "K_median": 233.0,
+        "K_weighted": 233.0,
+        "K_avg": 239.6,
+        "K_min": 233.0,
+        "K_max": 233.0,
+        "recommended_K": 233
+      }
+    }
+  }
+]

@@ -23,6 +23,7 @@ ITR_FILE = DATA_DIR / "itr_data_2025.json"
 WORKERS_FILE = DATA_DIR / "workers_data_2025.json"
 PROJECTS_OUTPUT = DATA_DIR / "projects_analysis.json"
 POSITION_OUTPUT = DATA_DIR / "position_distribution.json"
+POSITION_NORMS_OUTPUT = DATA_DIR / "position_norms_by_scale.json"  # Новый файл со сводкой K
 
 # Порядок месяцев
 MONTHS_ORDER = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
@@ -303,25 +304,71 @@ def calculate_monthly_stats():
             print(f"    K медиана:     {overall_median_k:.1f}")
             print(f"    K диапазон:    {min_k:.1f} - {max_k:.1f}")
 
-    # Выводим рекомендуемые коэффициенты
+    # Формируем сводный файл K коэффициентов для ВСЕХ должностей
     print("\n" + "="*60)
-    print("РЕКОМЕНДУЕМЫЕ КОЭФФИЦИЕНТЫ ДЛЯ КАЛЬКУЛЯТОРА")
+    print("СОЗДАНИЕ СВОДКИ K ДЛЯ ВСЕХ ДОЛЖНОСТЕЙ")
     print("="*60)
 
-    key_positions = ["Мастер", "Производитель работ", "Кладовщик / Работник склада / Специалист ОМТС"]
+    position_norms_by_scale = {}
 
-    for position in key_positions:
-        print(f"\n{position}:")
+    # Собираем все уникальные должности
+    all_positions = set()
+    for scale_data in k_by_scale_position.values():
+        all_positions.update(scale_data.keys())
+
+    for position_group in sorted(all_positions):
+        position_norms_by_scale[position_group] = {
+            "position_group": position_group,
+            "scales": {}
+        }
+
         for scale in ["Small", "Medium", "Large", "Very Large"]:
             positions_data = k_by_scale_position.get(scale, {})
-            if position in positions_data:
-                projects_k = positions_data[position]
+            if position_group in positions_data:
+                projects_k = positions_data[position_group]
                 k_medians = [p['K_median'] for p in projects_k]
-                if k_medians:
-                    median_k = statistics.median(k_medians)
-                    print(f"  {scale:12s}: K = {median_k:.0f} ({len(projects_k)} проектов)")
+                k_avgs = [p['K_avg'] for p in projects_k]
 
-    return projects_analysis, position_distribution
+                if k_medians:
+                    # Взвешенное среднее K (взвешенное по avg_workers)
+                    total_weight = sum(p['avg_workers'] for p in projects_k)
+                    weighted_k = sum(p['K_median'] * p['avg_workers'] for p in projects_k) / total_weight if total_weight > 0 else 0
+
+                    position_norms_by_scale[position_group]["scales"][scale] = {
+                        "projects_count": len(projects_k),
+                        "K_median": round(statistics.median(k_medians), 1),
+                        "K_weighted": round(weighted_k, 1),
+                        "K_avg": round(statistics.mean(k_avgs), 1),
+                        "K_min": round(min(k_medians), 1),
+                        "K_max": round(max(k_medians), 1),
+                        "recommended_K": round(statistics.median(k_medians))  # Целое число для использования
+                    }
+                    print(f"  {position_group} [{scale}]: K={round(statistics.median(k_medians))} ({len(projects_k)} проектов)")
+
+    # Преобразуем в список для JSON
+    position_norms_list = list(position_norms_by_scale.values())
+
+    # Сохраняем
+    save_json(POSITION_NORMS_OUTPUT, position_norms_list)
+    print(f"\n  Сохранено {len(position_norms_list)} должностей в {POSITION_NORMS_OUTPUT.name}")
+
+    # Выводим сводную таблицу
+    print("\n" + "="*60)
+    print("СВОДНАЯ ТАБЛИЦА K КОЭФФИЦИЕНТОВ (рекомендуемые)")
+    print("="*60)
+    print(f"\n{'Должность':<55} | {'S':>5} | {'M':>5} | {'L':>5} | {'XL':>5}")
+    print("-" * 85)
+
+    for position_data in position_norms_list:
+        pos_name = position_data['position_group'][:50]
+        scales = position_data['scales']
+        s = scales.get('Small', {}).get('recommended_K', '-')
+        m = scales.get('Medium', {}).get('recommended_K', '-')
+        l = scales.get('Large', {}).get('recommended_K', '-')
+        xl = scales.get('Very Large', {}).get('recommended_K', '-')
+        print(f"{pos_name:<55} | {str(s):>5} | {str(m):>5} | {str(l):>5} | {str(xl):>5}")
+
+    return projects_analysis, position_distribution, position_norms_list
 
 
 if __name__ == "__main__":
