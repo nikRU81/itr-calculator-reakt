@@ -176,6 +176,27 @@ export default function AnalyticsPage() {
     setFilteredProjects(filtered);
   }, [searchQuery, scaleFilter, projects]);
 
+  // useCallback должен быть ДО условных return-ов (правила React Hooks)
+  const getZoomedDomain = useCallback(
+    (baseDomain: number[], axis: 'x' | 'y') => {
+      if (zoomState.x1 !== null && zoomState.x2 !== null && axis === 'x') {
+        return [Math.min(zoomState.x1, zoomState.x2), Math.max(zoomState.x1, zoomState.x2)];
+      }
+      if (zoomState.y1 !== null && zoomState.y2 !== null && axis === 'y') {
+        return [Math.min(zoomState.y1, zoomState.y2), Math.max(zoomState.y1, zoomState.y2)];
+      }
+      // Применяем уровень зума
+      if (zoomLevel > 1) {
+        const range = baseDomain[1] - baseDomain[0];
+        const center = range / 2;
+        const newRange = range / zoomLevel;
+        return [center - newRange / 2, center + newRange / 2];
+      }
+      return baseDomain;
+    },
+    [zoomState, zoomLevel]
+  );
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[300px]">
@@ -250,26 +271,6 @@ export default function AnalyticsPage() {
   const yValues = scatterData.map((d) => d.y);
   const baseXDomain = [0, Math.max(...xValues, 100) * 1.1];
   const baseYDomain = [0, Math.max(...yValues, 50) * 1.1];
-
-  const getZoomedDomain = useCallback(
-    (baseDomain: number[], axis: 'x' | 'y') => {
-      if (zoomState.x1 !== null && zoomState.x2 !== null && axis === 'x') {
-        return [Math.min(zoomState.x1, zoomState.x2), Math.max(zoomState.x1, zoomState.x2)];
-      }
-      if (zoomState.y1 !== null && zoomState.y2 !== null && axis === 'y') {
-        return [Math.min(zoomState.y1, zoomState.y2), Math.max(zoomState.y1, zoomState.y2)];
-      }
-      // Применяем уровень зума
-      if (zoomLevel > 1) {
-        const range = baseDomain[1] - baseDomain[0];
-        const center = range / 2;
-        const newRange = range / zoomLevel;
-        return [center - newRange / 2, center + newRange / 2];
-      }
-      return baseDomain;
-    },
-    [zoomState, zoomLevel]
-  );
 
   const xDomain = getZoomedDomain(baseXDomain, 'x');
   const yDomain = getZoomedDomain(baseYDomain, 'y');
