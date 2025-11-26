@@ -16,6 +16,7 @@ import {
   BarChart3,
   AlertTriangle,
   FileText,
+  Grid3X3,
 } from 'lucide-react';
 import Card from '../../components/ui/Card';
 import MetricCard from '../../components/ui/MetricCard';
@@ -174,6 +175,14 @@ interface ProjectDetail {
   outlier_type: 'low' | 'high' | null;
 }
 
+// Интерфейс для тепловой карты
+interface MonthlyDynamicsRecord {
+  project: string;
+  month: string;
+  workers_unique_count: number;
+  itr_unique_count: number;
+}
+
 export default function StandardsPage() {
   const [companyStandards, setCompanyStandards] = useState<CompanyStandards | null>(null);
   const [positionNorms, setPositionNorms] = useState<PositionGroupNorm[]>([]);
@@ -186,6 +195,7 @@ export default function StandardsPage() {
   const [projectsAnalysis, setProjectsAnalysis] = useState<ProjectAnalysisRecord[]>([]);
   const [positionNormsByScale, setPositionNormsByScale] = useState<PositionNormsByScale[]>([]);
   const [monthlyDetails, setMonthlyDetails] = useState<MonthlyCalculationDetails | null>(null);
+  const [monthlyDynamics, setMonthlyDynamics] = useState<MonthlyDynamicsRecord[]>([]);
 
   // Фильтры для анализа
   const [selectedPosition, setSelectedPosition] = useState<string>('Мастер');
@@ -203,7 +213,7 @@ export default function StandardsPage() {
     async function loadData() {
       setLoading(true);
       try {
-        const [standards, norms, scaleData, posDistResp, projAnalResp, posNormsResp, monthlyDetailsResp] = await Promise.all([
+        const [standards, norms, scaleData, posDistResp, projAnalResp, posNormsResp, monthlyDetailsResp, monthlyDynResp] = await Promise.all([
           loadCompanyStandards(),
           loadPositionNorms(),
           loadScaleBasedStandards(),
@@ -211,6 +221,7 @@ export default function StandardsPage() {
           fetch('/data/projects_analysis.json').then(r => r.json()),
           fetch('/data/position_norms_by_scale.json').then(r => r.json()),
           fetch('/data/monthly_calculation_details.json').then(r => r.json()),
+          fetch('/data/monthly_dynamics.json').then(r => r.json()),
         ]);
         setCompanyStandards(standards);
         setPositionNorms(norms);
@@ -219,6 +230,7 @@ export default function StandardsPage() {
         setProjectsAnalysis(projAnalResp);
         setPositionNormsByScale(posNormsResp);
         setMonthlyDetails(monthlyDetailsResp);
+        setMonthlyDynamics(monthlyDynResp.monthly_dynamics || []);
       } catch (err) {
         setError('Ошибка загрузки данных');
         console.error(err);
@@ -393,6 +405,46 @@ export default function StandardsPage() {
     return scale?.color || '#94a3b8';
   };
 
+  // Порядок месяцев
+  const MONTHS_ORDER = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь"];
+
+  // Данные для тепловой карты
+  const heatmapData = useMemo(() => {
+    if (!monthlyDynamics.length) return { projects: [], maxWorkers: 0 };
+
+    // Группируем по проектам
+    const projectMap = new Map<string, Map<string, number>>();
+    let maxWorkers = 0;
+
+    monthlyDynamics.forEach(record => {
+      if (!projectMap.has(record.project)) {
+        projectMap.set(record.project, new Map());
+      }
+      const workers = record.workers_unique_count;
+      projectMap.get(record.project)!.set(record.month, workers);
+      if (workers > maxWorkers) maxWorkers = workers;
+    });
+
+    // Преобразуем в массив и сортируем по среднему количеству рабочих
+    const projects = Array.from(projectMap.entries())
+      .map(([project, months]) => {
+        const values = Array.from(months.values()).filter(v => v > 0);
+        const avgWorkers = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+        const totalWorkers = values.reduce((a, b) => a + b, 0);
+        return {
+          project,
+          months: Object.fromEntries(months),
+          avgWorkers,
+          totalWorkers,
+          activeMonths: values.length,
+        };
+      })
+      .filter(p => p.totalWorkers > 0) // Убираем пустые проекты
+      .sort((a, b) => b.avgWorkers - a.avgWorkers);
+
+    return { projects, maxWorkers };
+  }, [monthlyDynamics]);
+
   return (
     <div className="space-y-4">
       {/* Key Metrics */}
@@ -440,6 +492,9 @@ export default function StandardsPage() {
           </Tab>
           <Tab value="positions" icon={<Table className="w-4 h-4" />}>
             Должности
+          </Tab>
+          <Tab value="heatmap" icon={<Grid3X3 className="w-4 h-4" />}>
+            Тепловая карта
           </Tab>
           <Tab value="overview" icon={<PieChartIcon className="w-4 h-4" />}>
             Статистика
@@ -1285,6 +1340,97 @@ export default function StandardsPage() {
               <div className="flex items-center gap-1"><XCircle className="w-3 h-3 text-red-500" /> Исключаемая</div>
             </div>
           </Card>
+        </TabsContent>
+
+        {/* Heatmap Tab */}
+        <TabsContent value="heatmap">
+          <div className="space-y-4">
+            <Card className="p-4">
+              <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2">
+                <Grid3X3 className="w-5 h-5 text-primary-600" />
+                Тепловая карта: Рабочие по проектам и месяцам
+              </h3>
+
+              <div className="text-sm text-slate-600 mb-4">
+                Цвет ячейки показывает количество рабочих (W). Чем темнее — тем больше рабочих.
+                Всего {heatmapData.projects.length} проектов, максимум {heatmapData.maxWorkers} рабочих.
+              </div>
+
+              {/* Легенда цветов */}
+              <div className="flex items-center gap-2 mb-4 text-xs">
+                <span className="text-slate-500">Меньше</span>
+                <div className="flex">
+                  {[0.1, 0.25, 0.4, 0.55, 0.7, 0.85, 1].map((intensity, i) => (
+                    <div
+                      key={i}
+                      className="w-6 h-4"
+                      style={{
+                        backgroundColor: `rgba(79, 70, 229, ${intensity})`,
+                      }}
+                    />
+                  ))}
+                </div>
+                <span className="text-slate-500">Больше</span>
+              </div>
+
+              {/* Таблица тепловой карты */}
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs border-collapse">
+                  <thead>
+                    <tr>
+                      <th className="sticky left-0 bg-white z-10 text-left p-1 border-b border-r min-w-[180px]">
+                        Проект
+                      </th>
+                      {MONTHS_ORDER.map(month => (
+                        <th key={month} className="p-1 border-b text-center min-w-[45px]" title={month}>
+                          {month.slice(0, 3)}
+                        </th>
+                      ))}
+                      <th className="p-1 border-b border-l text-center bg-slate-50">Ср.</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {heatmapData.projects.map((project, idx) => (
+                      <tr key={idx} className="hover:bg-slate-50">
+                        <td
+                          className="sticky left-0 bg-white z-10 p-1 border-r truncate max-w-[180px]"
+                          title={project.project}
+                        >
+                          {project.project.length > 25 ? project.project.slice(0, 25) + '...' : project.project}
+                        </td>
+                        {MONTHS_ORDER.map(month => {
+                          const workers = project.months[month] || 0;
+                          const intensity = heatmapData.maxWorkers > 0 ? workers / heatmapData.maxWorkers : 0;
+                          return (
+                            <td
+                              key={month}
+                              className="p-1 text-center border"
+                              style={{
+                                backgroundColor: workers > 0
+                                  ? `rgba(79, 70, 229, ${Math.max(0.1, intensity)})`
+                                  : '#f8fafc',
+                                color: intensity > 0.5 ? 'white' : (workers > 0 ? '#1e293b' : '#cbd5e1'),
+                              }}
+                              title={`${project.project}: ${month} — ${workers} рабочих`}
+                            >
+                              {workers > 0 ? workers : '—'}
+                            </td>
+                          );
+                        })}
+                        <td className="p-1 text-center border-l bg-slate-50 font-semibold">
+                          {Math.round(project.avgWorkers)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-4 text-xs text-slate-500">
+                <p>Проекты отсортированы по среднему количеству рабочих (по убыванию)</p>
+              </div>
+            </Card>
+          </div>
         </TabsContent>
 
         {/* Overview/Statistics Tab */}
