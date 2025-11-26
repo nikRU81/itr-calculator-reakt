@@ -209,6 +209,9 @@ export default function StandardsPage() {
   const [detailsPosition, setDetailsPosition] = useState<string>('Мастер');
   const [detailsScale, setDetailsScale] = useState<string>('Small');
 
+  // Фильтр месяца для тепловой карты (по умолчанию последний месяц - Октябрь)
+  const [heatmapMonth, setHeatmapMonth] = useState<string>('Октябрь');
+
   useEffect(() => {
     async function loadData() {
       setLoading(true);
@@ -1358,36 +1361,52 @@ export default function StandardsPage() {
                 Всего {heatmapData.projects.length} проектов.
               </div>
 
-              {/* Легенда цветов */}
-              <div className="flex items-center gap-4 mb-4 text-xs">
-                <div className="flex items-center gap-1">
-                  <span className="text-slate-500">Падение</span>
-                  <div className="flex">
-                    {[-0.5, -0.3, -0.15].map((change, i) => (
-                      <div
-                        key={i}
-                        className="w-5 h-4"
-                        style={{
-                          backgroundColor: `rgba(220, 38, 38, ${Math.abs(change)})`,
-                        }}
-                      />
+              {/* Селектор месяца и легенда */}
+              <div className="flex flex-wrap items-center gap-4 mb-4">
+                <div className="flex items-center gap-2">
+                  <label className="text-sm font-medium text-slate-700">Месяц для индикатора:</label>
+                  <select
+                    value={heatmapMonth}
+                    onChange={(e) => setHeatmapMonth(e.target.value)}
+                    className="text-sm border border-slate-300 rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  >
+                    {MONTHS_ORDER.slice(1).map(month => (
+                      <option key={month} value={month}>{month}</option>
                     ))}
-                  </div>
+                  </select>
                 </div>
-                <div className="w-5 h-4 bg-slate-100 border border-slate-200" title="Без изменений / первый месяц" />
-                <div className="flex items-center gap-1">
-                  <div className="flex">
-                    {[0.15, 0.3, 0.5].map((change, i) => (
-                      <div
-                        key={i}
-                        className="w-5 h-4"
-                        style={{
-                          backgroundColor: `rgba(22, 163, 74, ${change})`,
-                        }}
-                      />
-                    ))}
+
+                {/* Легенда цветов */}
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="flex items-center gap-1">
+                    <span className="text-slate-500">Падение</span>
+                    <div className="flex">
+                      {[-0.5, -0.3, -0.15].map((change, i) => (
+                        <div
+                          key={i}
+                          className="w-5 h-4"
+                          style={{
+                            backgroundColor: `rgba(220, 38, 38, ${Math.abs(change)})`,
+                          }}
+                        />
+                      ))}
+                    </div>
                   </div>
-                  <span className="text-slate-500">Рост</span>
+                  <div className="w-5 h-4 bg-slate-100 border border-slate-200" title="Без изменений / первый месяц" />
+                  <div className="flex items-center gap-1">
+                    <div className="flex">
+                      {[0.15, 0.3, 0.5].map((change, i) => (
+                        <div
+                          key={i}
+                          className="w-5 h-4"
+                          style={{
+                            backgroundColor: `rgba(22, 163, 74, ${change})`,
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-slate-500">Рост</span>
+                  </div>
                 </div>
               </div>
 
@@ -1396,11 +1415,18 @@ export default function StandardsPage() {
                 <table className="w-full text-xs border-collapse">
                   <thead>
                     <tr>
-                      <th className="sticky left-0 bg-white z-10 text-left p-1 border-b border-r min-w-[180px]">
+                      <th className="sticky left-0 bg-white z-10 text-left p-1 border-b border-r min-w-[250px]">
                         Проект
                       </th>
+                      <th className="p-1 border-b border-r text-center min-w-[120px] bg-amber-50">
+                        Динамика ({heatmapMonth.slice(0, 3)})
+                      </th>
                       {MONTHS_ORDER.map(month => (
-                        <th key={month} className="p-1 border-b text-center min-w-[45px]" title={month}>
+                        <th
+                          key={month}
+                          className={`p-1 border-b text-center min-w-[45px] ${month === heatmapMonth ? 'bg-amber-100 font-bold' : ''}`}
+                          title={month}
+                        >
                           {month.slice(0, 3)}
                         </th>
                       ))}
@@ -1408,13 +1434,62 @@ export default function StandardsPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {heatmapData.projects.map((project, idx) => (
+                    {heatmapData.projects.map((project, idx) => {
+                      // Рассчитываем динамику для выбранного месяца
+                      const selectedMonthIdx = MONTHS_ORDER.indexOf(heatmapMonth);
+                      const selectedWorkers = project.months[heatmapMonth] || 0;
+                      const prevMonthForSelected = selectedMonthIdx > 0 ? MONTHS_ORDER[selectedMonthIdx - 1] : null;
+                      const prevWorkersForSelected = prevMonthForSelected ? (project.months[prevMonthForSelected] || 0) : 0;
+
+                      let dynamicsPercent = 0;
+                      if (prevMonthForSelected && prevWorkersForSelected > 0 && selectedWorkers > 0) {
+                        dynamicsPercent = (selectedWorkers - prevWorkersForSelected) / prevWorkersForSelected;
+                      } else if (prevMonthForSelected && prevWorkersForSelected === 0 && selectedWorkers > 0) {
+                        dynamicsPercent = 1;
+                      } else if (prevMonthForSelected && prevWorkersForSelected > 0 && selectedWorkers === 0) {
+                        dynamicsPercent = -1;
+                      }
+
+                      // Определяем текст и стиль индикатора динамики
+                      let dynamicsLabel = '—';
+                      let dynamicsColor = 'text-slate-400';
+                      let dynamicsBg = 'bg-slate-50';
+
+                      if (selectedWorkers === 0 && prevWorkersForSelected === 0) {
+                        dynamicsLabel = 'Нет данных';
+                        dynamicsColor = 'text-slate-400';
+                        dynamicsBg = 'bg-slate-50';
+                      } else if (dynamicsPercent > 0.2) {
+                        dynamicsLabel = '⬆️ Сильный рост';
+                        dynamicsColor = 'text-green-700 font-semibold';
+                        dynamicsBg = 'bg-green-100';
+                      } else if (dynamicsPercent > 0.05) {
+                        dynamicsLabel = '↗️ Небольшой рост';
+                        dynamicsColor = 'text-green-600';
+                        dynamicsBg = 'bg-green-50';
+                      } else if (dynamicsPercent >= -0.05) {
+                        dynamicsLabel = '➡️ Без динамики';
+                        dynamicsColor = 'text-slate-600';
+                        dynamicsBg = 'bg-slate-100';
+                      } else if (dynamicsPercent >= -0.2) {
+                        dynamicsLabel = '↘️ Небольшое снижение';
+                        dynamicsColor = 'text-red-600';
+                        dynamicsBg = 'bg-red-50';
+                      } else {
+                        dynamicsLabel = '⬇️ Сильное снижение';
+                        dynamicsColor = 'text-red-700 font-semibold';
+                        dynamicsBg = 'bg-red-100';
+                      }
+
+                      return (
                       <tr key={idx} className="hover:bg-slate-50">
                         <td
-                          className="sticky left-0 bg-white z-10 p-1 border-r truncate max-w-[180px]"
-                          title={project.project}
+                          className="sticky left-0 bg-white z-10 p-1 border-r text-left whitespace-nowrap"
                         >
-                          {project.project.length > 25 ? project.project.slice(0, 25) + '...' : project.project}
+                          {project.project}
+                        </td>
+                        <td className={`p-1 border-r text-center ${dynamicsBg} ${dynamicsColor} whitespace-nowrap`}>
+                          {dynamicsLabel}
                         </td>
                         {MONTHS_ORDER.map((month, monthIdx) => {
                           const workers = project.months[month] || 0;
@@ -1486,7 +1561,8 @@ export default function StandardsPage() {
                           {Math.round(project.avgWorkers)}
                         </td>
                       </tr>
-                    ))}
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
