@@ -1,9 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
 import {
-  Users,
-  Briefcase,
-  TrendingUp,
-  Building2,
   Table,
   PieChart as PieChartIcon,
   BookOpen,
@@ -19,7 +15,6 @@ import {
   Grid3X3,
 } from 'lucide-react';
 import Card from '../../components/ui/Card';
-import MetricCard from '../../components/ui/MetricCard';
 import { Tabs, TabsList, Tab, TabsContent } from '../../components/ui/Tabs';
 import {
   loadCompanyStandards,
@@ -450,34 +445,6 @@ export default function StandardsPage() {
 
   return (
     <div className="space-y-4">
-      {/* Key Metrics */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <MetricCard
-          label="Всего проектов"
-          value={companyStandards.total_projects}
-          icon={<Building2 className="w-5 h-5" />}
-          color="#4f46e5"
-        />
-        <MetricCard
-          label="Численность ИТР"
-          value={companyStandards.total_itr}
-          icon={<Briefcase className="w-5 h-5" />}
-          color="#10b981"
-        />
-        <MetricCard
-          label="Численность рабочих"
-          value={companyStandards.total_workers}
-          icon={<Users className="w-5 h-5" />}
-          color="#06b6d4"
-        />
-        <MetricCard
-          label="Медиана ИТР/100"
-          value={companyStandards.itr_per_100_workers_median.toFixed(2)}
-          icon={<TrendingUp className="w-5 h-5" />}
-          color="#f59e0b"
-        />
-      </div>
-
       {/* Tabs */}
       <Tabs defaultTab="analysis">
         <TabsList>
