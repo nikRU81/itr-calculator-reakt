@@ -1352,25 +1352,43 @@ export default function StandardsPage() {
               </h3>
 
               <div className="text-sm text-slate-600 mb-4">
-                Цвет ячейки показывает количество рабочих (W). Чем темнее — тем больше рабочих.
-                Всего {heatmapData.projects.length} проектов, максимум {heatmapData.maxWorkers} рабочих.
+                Цвет показывает изменение относительно предыдущего месяца:
+                <span className="text-green-600 font-medium"> зелёный</span> — рост,
+                <span className="text-red-600 font-medium"> красный</span> — падение.
+                Всего {heatmapData.projects.length} проектов.
               </div>
 
               {/* Легенда цветов */}
-              <div className="flex items-center gap-2 mb-4 text-xs">
-                <span className="text-slate-500">Меньше</span>
-                <div className="flex">
-                  {[0.1, 0.25, 0.4, 0.55, 0.7, 0.85, 1].map((intensity, i) => (
-                    <div
-                      key={i}
-                      className="w-6 h-4"
-                      style={{
-                        backgroundColor: `rgba(79, 70, 229, ${intensity})`,
-                      }}
-                    />
-                  ))}
+              <div className="flex items-center gap-4 mb-4 text-xs">
+                <div className="flex items-center gap-1">
+                  <span className="text-slate-500">Падение</span>
+                  <div className="flex">
+                    {[-0.5, -0.3, -0.15].map((change, i) => (
+                      <div
+                        key={i}
+                        className="w-5 h-4"
+                        style={{
+                          backgroundColor: `rgba(220, 38, 38, ${Math.abs(change)})`,
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
-                <span className="text-slate-500">Больше</span>
+                <div className="w-5 h-4 bg-slate-100 border border-slate-200" title="Без изменений / первый месяц" />
+                <div className="flex items-center gap-1">
+                  <div className="flex">
+                    {[0.15, 0.3, 0.5].map((change, i) => (
+                      <div
+                        key={i}
+                        className="w-5 h-4"
+                        style={{
+                          backgroundColor: `rgba(22, 163, 74, ${change})`,
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-slate-500">Рост</span>
+                </div>
               </div>
 
               {/* Таблица тепловой карты */}
@@ -1398,20 +1416,67 @@ export default function StandardsPage() {
                         >
                           {project.project.length > 25 ? project.project.slice(0, 25) + '...' : project.project}
                         </td>
-                        {MONTHS_ORDER.map(month => {
+                        {MONTHS_ORDER.map((month, monthIdx) => {
                           const workers = project.months[month] || 0;
-                          const intensity = heatmapData.maxWorkers > 0 ? workers / heatmapData.maxWorkers : 0;
+                          const prevMonth = monthIdx > 0 ? MONTHS_ORDER[monthIdx - 1] : null;
+                          const prevWorkers = prevMonth ? (project.months[prevMonth] || 0) : 0;
+
+                          // Рассчитываем изменение относительно предыдущего месяца
+                          let changePercent = 0;
+                          if (prevMonth && prevWorkers > 0 && workers > 0) {
+                            changePercent = (workers - prevWorkers) / prevWorkers;
+                          } else if (prevMonth && prevWorkers === 0 && workers > 0) {
+                            changePercent = 1; // Новый проект — рост на 100%
+                          } else if (prevMonth && prevWorkers > 0 && workers === 0) {
+                            changePercent = -1; // Закрытие — падение на 100%
+                          }
+
+                          // Определяем цвет: зелёный для роста, красный для падения
+                          // Интенсивность от 0.15 до 0.7 в зависимости от силы изменения
+                          const absChange = Math.min(Math.abs(changePercent), 1); // Ограничиваем 100%
+                          const intensity = 0.15 + absChange * 0.55; // От 0.15 до 0.7
+
+                          let bgColor = '#f1f5f9'; // Нейтральный серый (первый месяц или нет данных)
+                          let textColor = '#64748b';
+
+                          if (workers > 0 && monthIdx === 0) {
+                            // Первый месяц — нейтральный синий
+                            bgColor = 'rgba(79, 70, 229, 0.15)';
+                            textColor = '#1e293b';
+                          } else if (workers > 0 || (prevWorkers > 0 && workers === 0)) {
+                            if (changePercent > 0.02) {
+                              // Рост (> 2%) — зелёный
+                              bgColor = `rgba(22, 163, 74, ${intensity})`;
+                              textColor = intensity > 0.4 ? 'white' : '#166534';
+                            } else if (changePercent < -0.02) {
+                              // Падение (> 2%) — красный
+                              bgColor = `rgba(220, 38, 38, ${intensity})`;
+                              textColor = intensity > 0.4 ? 'white' : '#991b1b';
+                            } else if (workers > 0) {
+                              // Без существенных изменений — нейтральный
+                              bgColor = '#e2e8f0';
+                              textColor = '#1e293b';
+                            }
+                          }
+
+                          // Формируем текст подсказки
+                          let changeText = '';
+                          if (monthIdx > 0 && (workers > 0 || prevWorkers > 0)) {
+                            const diff = workers - prevWorkers;
+                            const sign = diff > 0 ? '+' : '';
+                            const percent = prevWorkers > 0 ? ` (${sign}${Math.round(changePercent * 100)}%)` : '';
+                            changeText = `, изм: ${sign}${diff}${percent}`;
+                          }
+
                           return (
                             <td
                               key={month}
                               className="p-1 text-center border"
                               style={{
-                                backgroundColor: workers > 0
-                                  ? `rgba(79, 70, 229, ${Math.max(0.1, intensity)})`
-                                  : '#f8fafc',
-                                color: intensity > 0.5 ? 'white' : (workers > 0 ? '#1e293b' : '#cbd5e1'),
+                                backgroundColor: bgColor,
+                                color: workers === 0 ? '#cbd5e1' : textColor,
                               }}
-                              title={`${project.project}: ${month} — ${workers} рабочих`}
+                              title={`${project.project}: ${month} — ${workers} раб.${changeText}`}
                             >
                               {workers > 0 ? workers : '—'}
                             </td>
