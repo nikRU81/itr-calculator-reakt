@@ -365,6 +365,43 @@ export default function StandardsPage() {
 
   const demoResults = calculateDemo();
 
+  // Данные для тепловой карты (useMemo должен быть до early returns)
+  const heatmapData = useMemo(() => {
+    if (!monthlyDynamics.length) return { projects: [], maxWorkers: 0 };
+
+    // Группируем по проектам
+    const projectMap = new Map<string, Map<string, number>>();
+    let maxWorkers = 0;
+
+    monthlyDynamics.forEach(record => {
+      if (!projectMap.has(record.project)) {
+        projectMap.set(record.project, new Map());
+      }
+      const workers = record.workers_unique_count;
+      projectMap.get(record.project)!.set(record.month, workers);
+      if (workers > maxWorkers) maxWorkers = workers;
+    });
+
+    // Преобразуем в массив и сортируем по среднему количеству рабочих
+    const projects = Array.from(projectMap.entries())
+      .map(([project, months]) => {
+        const values = Array.from(months.values()).filter(v => v > 0);
+        const avgWorkers = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+        const totalWorkers = values.reduce((a, b) => a + b, 0);
+        return {
+          project,
+          months: Object.fromEntries(months),
+          avgWorkers,
+          totalWorkers,
+          activeMonths: values.length,
+        };
+      })
+      .filter(p => p.totalWorkers > 0) // Убираем пустые проекты
+      .sort((a, b) => b.avgWorkers - a.avgWorkers);
+
+    return { projects, maxWorkers };
+  }, [monthlyDynamics]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[300px]">
@@ -407,43 +444,6 @@ export default function StandardsPage() {
 
   // Порядок месяцев
   const MONTHS_ORDER = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь"];
-
-  // Данные для тепловой карты
-  const heatmapData = useMemo(() => {
-    if (!monthlyDynamics.length) return { projects: [], maxWorkers: 0 };
-
-    // Группируем по проектам
-    const projectMap = new Map<string, Map<string, number>>();
-    let maxWorkers = 0;
-
-    monthlyDynamics.forEach(record => {
-      if (!projectMap.has(record.project)) {
-        projectMap.set(record.project, new Map());
-      }
-      const workers = record.workers_unique_count;
-      projectMap.get(record.project)!.set(record.month, workers);
-      if (workers > maxWorkers) maxWorkers = workers;
-    });
-
-    // Преобразуем в массив и сортируем по среднему количеству рабочих
-    const projects = Array.from(projectMap.entries())
-      .map(([project, months]) => {
-        const values = Array.from(months.values()).filter(v => v > 0);
-        const avgWorkers = values.length > 0 ? values.reduce((a, b) => a + b, 0) / values.length : 0;
-        const totalWorkers = values.reduce((a, b) => a + b, 0);
-        return {
-          project,
-          months: Object.fromEntries(months),
-          avgWorkers,
-          totalWorkers,
-          activeMonths: values.length,
-        };
-      })
-      .filter(p => p.totalWorkers > 0) // Убираем пустые проекты
-      .sort((a, b) => b.avgWorkers - a.avgWorkers);
-
-    return { projects, maxWorkers };
-  }, [monthlyDynamics]);
 
   return (
     <div className="space-y-4">
